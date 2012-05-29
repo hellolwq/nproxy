@@ -19,18 +19,39 @@ function main()
 {
 	init_logs();
     var webSvr = HTTP.createServer(function (request, response){
-        log(LOG_INFO, "A request in!");
+        //log(LOG_INFO, "A request in!");
         var origUrl = proxy_resolve_request(request);
         if(origUrl)
         {
             log(LOG_INFO,"origUrl:" + origUrl.protocol+"//" + origUrl.host+":" + origUrl.port+ origUrl.path);
             htmlContent = proxy_request(origUrl,function(header,body){
-                //print_r(header);
-                if(header['content-type'] == 'image/jpeg')
-                    ;//body = body.toString();
+                if(header['content-type'] == 'image/jpeg'
+					|| header['content-type'] == 'image/gif'
+				)
+                {
+					proxy_response_client(response,body, header)
+				}
                 else
-                    body = proxy_rewrite(body.toString(),request);
-                proxy_response_client(response,body, header)
+				{
+					if(body)
+					{
+						if(response.proxy_buffer == null)
+							response.proxy_buffer = body.toString();
+						else
+							response.proxy_buffer += body.toString();
+					}
+					else
+					{
+						var sendBuf = proxy_rewrite(response.proxy_buffer,request);
+						proxy_response_client(response, sendBuf , header);
+					}
+					
+				}
+				
+				//log(LOG_DBG,"response.proxy_buffer:" +response.proxy_buffer); 
+				
+				
+               
             });
         }
         else
@@ -84,7 +105,7 @@ function proxy_resolve_request(request)
     //http://localhost:8080/nproxy/http/test/abc.com1
     var proxyUrlReg = /(https?:\/\/[^\/]+)?\/nproxy\/(https?)\/([^:\/]+)(:\d+)?(\/.*)?$/i;
     request.url = request.url.toLowerCase();
-    log(LOG_DBG,"request.url = " + request.url);
+    //log(LOG_DBG,"request.url = " + request.url);
     var ret = null;
     if(ret = request.url.match(proxyUrlReg))
     {
@@ -115,11 +136,15 @@ function proxy_resolve_request(request)
 
 function proxy_request(urlObj,callback)
 {
-	log(LOG_DBG,"proxy_request " + urlObj);
+	//log(LOG_DBG,"proxy_request " + urlObj);
     HTTP.get(urlObj, function(res) {
       res.on('data',function(body){
-			log(LOG_DBG,"proxy_request ret:" + body);
+			//log(LOG_DBG,"proxy_request:" + body);
             callback(res.headers,body);
+      });
+	  
+	   res.on('end',function(body){
+			callback(res.headers,null);
       });
     }).on('error', function(e) {
        //log(LOG_ERROR,e.getMessage());
@@ -131,20 +156,20 @@ function proxy_rewrite(data,request)
 {
     //log(LOG_DBG,"typeof(data):",typeof(data));
     //print_r(data);
-	log(LOG_DBG,"proxy_rewrite:",data);
-	log(LOG_DBG,"proxy_rewrite request.orig_url" + request.orig_url);
-    return data.replace(/([\s\S]*(src|href)=['"])([^'"]*)(['"][\s\S]*)/g, function() { 
+	//log(LOG_DBG,"proxy_rewrite:" + data);
+	//log(LOG_DBG,"proxy_rewrite request.orig_url" + request.orig_url);
+    return data.replace(/(\s(src|href)=['"])([^'"]*)(['"])/g, function() { 
         return (arguments[1]+helper_trans_url(arguments[3],request)+arguments[4]);
     });
 }
 
 function helper_trans_url(url,request)
 {
-    log(LOG_DBG,"helper_trans_url,url=" + url + ",refUrl:" + request.orig_url);
+    //log(LOG_DBG,"helper_trans_url,url=" + url + ",refUrl:" + request.orig_url);
     //nproxy/http/200.200.72.50
 	var fullPath = URL.resolve(request.orig_url,url);
 	var ret = (request.proxy_host?request.proxy_host:'') + "/nproxy/" + fullPath.replace(/^(https?):\/\//i,"$1/");
-    log(LOG_DBG,"helper_trans_url,ret=" + ret);
+    //log(LOG_DBG,"helper_trans_url url:" + url + ",ret=" + ret);
     return ret;
 }
 
@@ -154,13 +179,17 @@ function proxy_response_client(response,data,header)
     if(header)
         contentType = header['content-type'];
     
-    log(LOG_DBG,"proxy_response_client,contentType=" + contentType);
+    //log(LOG_DBG,"proxy_response_client,contentType=" + contentType);
     if(response.is_headset)
     {
 		response.writeHead(200, {'Content-Type':contentType });
 		response.is_headset = true;
 	}
-    response.write(data);
+	
+	if(data)
+		response.write(data);
+	else
+		response.end();
 }
 
 
