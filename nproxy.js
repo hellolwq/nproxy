@@ -2,20 +2,11 @@ var HTTP = require('http');
 var FS = require('fs');
 var URL = require('url');
 
-/*HTTP.createServer(function (request, response) {
-    request.on('data',function(chunk){
-        response.writeHead(200, {'Content-Type': 'text/plain'});
-        response.write(chunk);
-        response.end('Hello World\n');
-    });
-    
-}).listen(8000);
-*/
-
 var SVR_PORT = 8080;
-var ACCESS_LOG_FILE = "./logs/access.log";
-var ERROR_LOG_FILE = "./logs/error.log";
-var DBG_LOG_FILE = "./logs/debug.log";
+var LOG_DIR = "./logs/";
+var ACCESS_LOG_FILE = LOG_DIR + "access.log";
+var ERROR_LOG_FILE = LOG_DIR + "error.log";
+var DBG_LOG_FILE = LOG_DIR +  "debug.log";
 
 var LOG_DBG = 0;
 var LOG_INFO = 1;
@@ -26,7 +17,7 @@ var LOG_ERROR = 3;
 var g_dbgFile = null;
 function main()
 {
-    g_dbgFile = FS.openSync(DBG_LOG_FILE,"a+");
+	init_logs();
     var webSvr = HTTP.createServer(function (request, response){
         log(LOG_INFO, "A request in!");
         var origUrl = proxy_resolve_request(request);
@@ -61,13 +52,28 @@ function main()
     });
 }
 
+function init_logs()
+{
+	try
+	{
+		var statRet = FS.statSync(LOG_DIR);
+		if(!statRet || !statRet.isDirectory())
+		{
+			FS.mkdirSync(LOG_DIR);
+		}
+	}catch(e){
+		FS.mkdirSync(LOG_DIR);
+	}
+	
+	g_dbgFile = FS.openSync(DBG_LOG_FILE,"a+");
+}
 function helper_getRefUrl(reqst)
 {
     return reqst.url.replace(/http\/.*$/i,'');
 }
 
 /*
-    proxy url:http://proxy/rproxy/http/host:port/path
+    proxy url:http://proxy/nproxy/http/host:port/path
 */
 function proxy_resolve_request(request)
 {
@@ -75,8 +81,8 @@ function proxy_resolve_request(request)
     {
         return null;
     }
-    //http://localhost:8080/rproxy/http/test/abc.com1
-    var proxyUrlReg = /(https?:\/\/[^\/]+)?\/rproxy\/(https?)\/([^:\/]+)(:\d+)?(\/.*)?$/i;
+    //http://localhost:8080/nproxy/http/test/abc.com1
+    var proxyUrlReg = /(https?:\/\/[^\/]+)?\/nproxy\/(https?)\/([^:\/]+)(:\d+)?(\/.*)?$/i;
     request.url = request.url.toLowerCase();
     log(LOG_DBG,"request.url = " + request.url);
     var ret = null;
