@@ -88,14 +88,21 @@ function proxy_resolve_request(request)
     var ret = null;
     if(ret = request.url.match(proxyUrlReg))
     {
-        if(ret[4] == null)
+		request.orig_url = ret[2] +"://"+ ret[3] + (ret[4]?ret[4]:'') + (ret[5]?ret[5]:'');
+        request.proxy_host = ret[1];
+		if(ret[4] == null)
         {
             if(ret[2] == 'http')
                 ret[4] = 80;
             else if(ret[2] == 'https')
                 ret[4] = 443; 
         }
-        
+		else
+		{
+			ret[4] = ret[4].substr(1);//esacep ':'
+		}
+		
+		ret[5] = ret[5]?ret[5]:'';
         return {
             protocol:ret[2]+":",
             host:ret[3],
@@ -122,15 +129,17 @@ function proxy_rewrite(data,request)
 {
     //log(LOG_DBG,"typeof(data):",typeof(data));
     //print_r(data);
-    return data.replace(/([\s\S]*src=['"])([^'"]*)(['"][\s\S]*)/g, function() { 
-        return (arguments[1]+helper_trans_url(arguments[2],request.url)+arguments[3]);
+    return data.replace(/([\s\S]*(src|href)=['"])([^'"]*)(['"][\s\S]*)/g, function() { 
+        return (arguments[1]+helper_trans_url(arguments[3],request)+arguments[4]);
     });
 }
 
-function helper_trans_url(url,refUrl)
+function helper_trans_url(url,request)
 {
-    log(LOG_DBG,"helper_trans_url,url=" + url);
-    var ret = URL.resolve(refUrl,url);
+    log(LOG_DBG,"helper_trans_url,url=" + url + ",refUrl:" + request.orig_url);
+    //nproxy/http/200.200.72.50
+	var fullPath = URL.resolve(request.orig_url,url);
+	var ret = (request.proxy_host?request.proxy_host:'') + "/nproxy/" + fullPath.replace(/^(https?):\/\//i,"$1/");
     log(LOG_DBG,"helper_trans_url,ret=" + ret);
     return ret;
 }
