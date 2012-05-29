@@ -115,8 +115,10 @@ function proxy_resolve_request(request)
 
 function proxy_request(urlObj,callback)
 {
+	log(LOG_DBG,"proxy_request " + urlObj);
     HTTP.get(urlObj, function(res) {
       res.on('data',function(body){
+			log(LOG_DBG,"proxy_request ret:" + body);
             callback(res.headers,body);
       });
     }).on('error', function(e) {
@@ -129,6 +131,8 @@ function proxy_rewrite(data,request)
 {
     //log(LOG_DBG,"typeof(data):",typeof(data));
     //print_r(data);
+	log(LOG_DBG,"proxy_rewrite:",data);
+	log(LOG_DBG,"proxy_rewrite request.orig_url" + request.orig_url);
     return data.replace(/([\s\S]*(src|href)=['"])([^'"]*)(['"][\s\S]*)/g, function() { 
         return (arguments[1]+helper_trans_url(arguments[3],request)+arguments[4]);
     });
@@ -151,8 +155,11 @@ function proxy_response_client(response,data,header)
         contentType = header['content-type'];
     
     log(LOG_DBG,"proxy_response_client,contentType=" + contentType);
-    
-    response.writeHead(200, {'Content-Type':contentType });
+    if(response.is_headset)
+    {
+		response.writeHead(200, {'Content-Type':contentType });
+		response.is_headset = true;
+	}
     response.write(data);
 }
 
