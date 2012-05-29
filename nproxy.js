@@ -1,6 +1,7 @@
 var HTTP = require('http');
 var FS = require('fs');
 var URL = require('url');
+var HtmlParser = require('./lib/htmlparser.js');
 
 var SVR_PORT = 8080;
 var LOG_DIR = "./logs/";
@@ -155,12 +156,18 @@ function proxy_request(urlObj,callback)
 function proxy_rewrite(data,request)
 {
     //log(LOG_DBG,"typeof(data):",typeof(data));
-    //print_r(data);
-	//log(LOG_DBG,"proxy_rewrite:" + data);
-	//log(LOG_DBG,"proxy_rewrite request.orig_url" + request.orig_url);
-    return data.replace(/(\s(src|href)=['"])([^'"]*)(['"])/g, function() { 
+    log(LOG_DBG,"proxy_rewrite before:" + data);
+    var ret = data;
+   // try{
+        ret = HtmlParser.RewriteHtml(data,request,helper_trans_url);
+    //}catch(e){
+    //    ret = data;
+    //}
+    log(LOG_DBG,"proxy_rewrite after:" + ret);
+    return ret;
+    /*return data.replace(/(\s(src|href)=['"])([^'"]*)(['"])/g, function() { 
         return (arguments[1]+helper_trans_url(arguments[3],request)+arguments[4]);
-    });
+    });*/
 }
 
 function helper_trans_url(url,request)
