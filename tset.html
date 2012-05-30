@@ -1,0 +1,25 @@
+<html>
+<head>
+<script src="lib/htmlparser.js"> </script>
+</head>
+<body>
+    <textarea id="input" rows="20" style="width:100%">
+    </textarea>
+    <button onClick="onRewrite()" style="width:200px;">ok</button>
+    <textarea id="output" rows="20" style="width:100%">
+    </textarea>
+    <script>
+        function onRewrite()
+        {
+            var input = document.getElementById("input").innerText;
+            var output = RewriteHtml(input,null,tran_url);
+            document.getElementById("output").innerText = output;
+        }
+        
+        function tran_url(url)
+        {
+            return url+"##";
+        }
+    </script>
+</body>
+</html>
