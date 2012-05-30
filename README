@@ -1,5 +1,6 @@
 nproxy基于node.js开发，用于实现http协议级别的Web代理。
-目前支持简单的的HTML代理，完整的HTML、JS等重写正在完成中，问题会比较多，如果有发现，请反馈到hellolwq@gmail.com
+目前支持简单的的HTML代理，完整的HTML、JS等重写正在完成中，问题会比较多，如果有发现，请反馈到hellolwq@gmail.com。
+欢迎有兴趣的朋友一起参与。
 
 一、特性
 1、支持HTML重写，可重写静态URL链接。
