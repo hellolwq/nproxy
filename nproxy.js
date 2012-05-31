@@ -81,6 +81,7 @@ function proxy_handle(request, response)
                 {
                     var sendBuf = proxy_rewrite(response.proxy_buffer,request);
                     proxy_response_client(response, sendBuf , header);
+                    proxy_response_client(response, null);
                 }
                 
             }
@@ -91,6 +92,7 @@ function proxy_handle(request, response)
     else
     {   
        proxy_response_client(response,ERROR_RESPONSE);
+       proxy_response_client(response,null);
     }
 }
 
