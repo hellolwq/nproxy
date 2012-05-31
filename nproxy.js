@@ -8,7 +8,8 @@ var LOG_DIR = "./logs/";
 var ACCESS_LOG_FILE = LOG_DIR + "access.log";
 var ERROR_LOG_FILE = LOG_DIR + "error.log";
 var DBG_LOG_FILE = LOG_DIR +  "debug.log";
-
+var PORTAL_FILE = "index.html";
+var ERROR_RESPONSE = "<h1>error!!</h1>";
 var LOG_DBG = 0;
 var LOG_INFO = 1;
 var LOG_ACCESS = 2;
@@ -16,50 +17,14 @@ var LOG_ERROR = 3;
 
 
 var g_dbgFile = null;
+var g_portal_content = null;
 function main()
 {
-	init_logs();
+	init_nproxy();
     var webSvr = HTTP.createServer(function (request, response){
-        //log(LOG_INFO, "A request in!");
-        var origUrl = proxy_resolve_request(request);
-        if(origUrl)
-        {
-            log(LOG_INFO,"origUrl:" + origUrl.protocol+"//" + origUrl.host+":" + origUrl.port+ origUrl.path);
-            htmlContent = proxy_request(origUrl,function(header,body){
-                if(header['content-type'] == 'image/jpeg'
-					|| header['content-type'] == 'image/gif'
-				)
-                {
-					proxy_response_client(response,body, header)
-				}
-                else
-				{
-					if(body)
-					{
-						if(response.proxy_buffer == null)
-							response.proxy_buffer = body.toString();
-						else
-							response.proxy_buffer += body.toString();
-					}
-					else
-					{
-						var sendBuf = proxy_rewrite(response.proxy_buffer,request);
-						proxy_response_client(response, sendBuf , header);
-					}
-					
-				}
-				
-				//log(LOG_DBG,"response.proxy_buffer:" +response.proxy_buffer); 
-				
-				
-               
-            });
-        }
-        else
-        {   
-            var htmlContent = "<h1>error!!</h1>";
-            proxy_response_client(response,htmlContent);
-        }
+        if(!proxy_pre_handle(request, response))
+            proxy_handle(request, response);
+        
     });
     webSvr.listen(SVR_PORT);
     
@@ -74,8 +39,71 @@ function main()
     });
 }
 
-function init_logs()
+function proxy_pre_handle(request, response)
 {
+    if(request === null && typeof(request) != 'object')
+    {
+        return false;
+    }
+    
+    var inUrl = request.url;
+    if(/^\/nproxy\//i.test(inUrl))//nproxy url
+        return false;
+        
+    proxy_response_client(response,g_portal_content);
+    proxy_response_client(response,null);
+    return true;
+}
+
+function proxy_handle(request, response)
+{
+    var origUrl = proxy_resolve_request(request);
+    if(origUrl)
+    {
+        log(LOG_INFO,"origUrl:" + origUrl.protocol+"//" + origUrl.host+":" + origUrl.port+ origUrl.path);
+        htmlContent = proxy_request(origUrl,function(header,body){
+            if(header['content-type'] == 'image/jpeg'
+                || header['content-type'] == 'image/gif'
+            )
+            {
+                proxy_response_client(response,body, header)
+            }
+            else
+            {
+                if(body)
+                {
+                    if(response.proxy_buffer == null)
+                        response.proxy_buffer = body.toString();
+                    else
+                        response.proxy_buffer += body.toString();
+                }
+                else
+                {
+                    var sendBuf = proxy_rewrite(response.proxy_buffer,request);
+                    proxy_response_client(response, sendBuf , header);
+                }
+                
+            }
+            
+            //log(LOG_DBG,"response.proxy_buffer:" +response.proxy_buffer); 
+        });
+    }
+    else
+    {   
+       proxy_response_client(response,ERROR_RESPONSE);
+    }
+}
+
+
+function init_nproxy()
+{
+    g_portal_content = FS.readFileSync(PORTAL_FILE);
+    if(!g_portal_content)
+    {
+        g_portal_content = ERROR_RESPONSE;
+    }
+    
+    //log(LOG_INFO,"g_portal_content=" + g_portal_content);
 	try
 	{
 		var statRet = FS.statSync(LOG_DIR);
@@ -187,7 +215,7 @@ function proxy_response_client(response,data,header)
         contentType = header['content-type'];
     
     //log(LOG_DBG,"proxy_response_client,contentType=" + contentType);
-    if(response.is_headset)
+    if(!response.is_headset)
     {
 		response.writeHead(200, {'Content-Type':contentType });
 		response.is_headset = true;
