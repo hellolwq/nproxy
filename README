@@ -17,7 +17,7 @@ nproxy基于node.js开发，用于实现http协议级别的Web代理。DEMO地�
 2、下载nproxy文件 https://github.com/hellolwq/nproxy/downloads
 3、修改nproxy.js配置监听端口。（之后会统一放到配置文件）
 4、命令行下执行:node nproxy，启动nproxy
-5、打开浏览器进行访问http://localhost:port/nproxy/http/baidu.com
+5、打开浏览器进行访问http://localhost:port
 
 四、更新日志
 20120-.06.01 增加DEMO页面index.html，增加DEMO环境http://liaoweiqiang.info:8080
