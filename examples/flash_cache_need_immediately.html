@@ -1,0 +1,36 @@
+<HTML>
+<HEAD>
+<TITLE>Popup Example</TITLE>
+</HEAD>
+<BODY>
+<div style="display:none;"  name="testDiv" id="testDiv">
+	document.all flash_cache Suc!
+</div>
+<script src="include.js"></script>
+
+<script>
+	test_open();
+	
+function test_document_get()
+{
+	var obj = document.all.testDiv;
+	obj = document.anchors;
+	obj = document.applets;
+	obj = document.childNodes;
+	obj = document.forms;
+	obj = document.embeds;
+	obj = document.frames;
+	obj = document.images;
+	obj = document.links;
+	obj = document.namespaces;
+	obj = document.scripts;
+	obj = document.styleSheets;
+	obj = document.scripts;
+}
+	var objTest = eval("document.all.testDiv");
+	document.writeln("<br>");
+	document.writeln(objTest.innerHTML);
+
+</script>
+</BODY>
+</HTML>

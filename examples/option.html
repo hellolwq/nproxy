@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body onload='init();'>
+	<select id="select"></select>
+	<script type="text/javascript">
+	function init()
+	{
+		newOption_OK();
+		newOption_WRONG();
+		createElement_OPTION_OK();
+		createElement_OPTION_WRONG();
+	}
+	function newOption_OK()
+	{
+		var option = new Option('name', 'value');
+		document.getElementById('select').add(option,0);
+		var doc = option.document;
+	}
+	
+	function newOption_WRONG()
+	{
+		var option = new Option('name', 'value');
+		var doc = option.document;
+		document.getElementById('select').add(option,0);
+	}
+	
+	function createElement_OPTION_OK()
+	{
+		var oOption = document.createElement("OPTION");
+		document.getElementById('select').options.add(oOption);
+		oOption.innerText = "Two";
+		oOption.value = "2";
+	}
+	
+	function createElement_OPTION_WRONG()
+	{
+		var oOption = document.createElement("OPTION");
+		oOption.innerText = "Two";
+		oOption.value = "2";
+		document.getElementById('select').options.add(oOption);
+	}
+	</script>
+</body>
+</html>

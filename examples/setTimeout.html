@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><button onClick="onStartTimeoutPointer()">StartTimeout_fun_point</button></p>
+<p><button onClick="onStartTimeoutCode()">StartTimeoutCode</button></p>
+<p><button onClick="onStartTimeoutVBScript()">StartTimeoutVBScript</button></p>
+
+
+
+<script>
+	function onStartTimeoutPointer()
+	{
+		window.setTimeout(openWindow,1000);
+	}
+	
+	function onStartTimeoutCode()
+	{
+		window.setTimeout("openWindow('http://baidu.com/onStartTimeoutCode')",1000);
+	}
+	
+	function onStartTimeoutVBScript()
+	{
+		window.setTimeout("call window.open('http://baidu.com/onStartTimeoutVBScript')",1000,"VBScript");
+	}
+	
+	function openWindow(url)
+	{
+		!url && (url = "http://g.cn");
+		window.open(url);
+	}
+	
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

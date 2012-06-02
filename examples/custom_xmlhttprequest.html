@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+
+<body>
+<textarea style="width:100%;height:200px" id="output">
+</textarea>
+	<script>
+	(function()
+	{
+		if (typeof XMLHttpRequest == 'undefined') 
+		{
+			XMLHttpRequest = function () 
+			{
+				var msxmls = ['MSXML3', 'MSXML2', 'Microsoft'];
+				if(navigator.userAgent.indexOf("MSIE 5") >=0 )
+				{
+					msxmls = ['Microsoft','MSXML3', 'MSXML2' ]
+				}
+				for (var i=0; i < msxmls.length; i++) 
+				{
+					try 
+					{
+						return new ActiveXObject(msxmls[i]+'.XMLHTTP')
+
+					} 
+					catch (e) 
+					{}
+				}
+				return null;
+			}
+		}
+	})();
+	
+	
+	function post_http(url,sbody,method,func)
+	{
+		func = func===undefined?new Function():func;
+		var xmlhttp  = null;
+		try{
+			xmlhttp = new XMLHttpRequest();
+			if(xmlhttp == null){
+				return "";
+			}
+		}
+		catch(e)
+		{
+			return "";
+		}
+		
+		if((method != null)&&(method.toUpperCase()=="GET" || method.toUpperCase()=="POST"))
+		{
+			method = method.toUpperCase();	
+		}
+		else
+		{
+			method = "GET";
+		}
+		var IsAsynch = false;
+		if(arguments.length > 3 && typeof(arguments[3])=='boolean')
+		{
+			IsAsynch = arguments[3];
+		}
+		xmlhttp.open(method, url+"?"+Math.random() , IsAsynch);	// false=synch
+		xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		try{
+			if (sbody){
+				xmlhttp.send(sbody);
+			}else{
+				xmlhttp.send(null);
+			}
+		}
+		catch(e)
+		{
+			return "";
+		}
+
+		if((xmlhttp.readyState == 4) && (xmlhttp.status == 200))
+		{
+			func(xmlhttp.responseText ? xmlhttp.responseText : "");
+			return (xmlhttp.responseText ? xmlhttp.responseText : "");
+		}
+		else
+		{
+			return "0";
+		}
+	}
+	
+	post_http('custom_xmlhttprequest.html',null,"POST",function(responseText)
+	{
+		document.getElementById("output").value = responseText;
+	})
+	
+	
+	</script>
+</body>
+
+</html>
+
+
+
+
+

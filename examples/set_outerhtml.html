@@ -1,0 +1,32 @@
+<HTML>
+<HEAD>
+<TITLE>setOuterHTML</TITLE>
+</HEAD>
+<BODY>
+<div id="output" name="ouput">
+</div>
+<button  id="btn" onclick="onSetOuterHTML()">setOuterHTML</button>
+<script>
+	function onSetOuterHTML()
+	{
+		if(document.getElementById("output").outerHTML)
+		{
+			document.getElementById("output").outerHTML = "<p><div id='output_new'><a href='http://g.cn'>google</a></div></p>";
+			document.getElementById("btn").style.display = "none";
+		}
+		else
+		{
+			document.write("This browser does not support outerHTML");
+			document.close();
+		}
+	}
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

@@ -1,0 +1,1567 @@
+<html>
+<!--支持base 服务端测试-->
+<base href="http://200.200.72.50/testcase/M55/html/" />
+<!--支持base为https 服务端测试-->
+<base href="https://200.200.72.50/testcase/M55/html/" />
+<head>
+<meta http-equiv="refresh" content="50; url=http://www.google.com/" />
+<link type="text/css" rel="stylesheet" href="css/test.css"/>
+<style>
+	<!--@import 服务端测试-->
+	@import url('style.css');
+</style>
+<!--支持IE注释表达式 服务端测试-->
+<!--[if lt IE 7]>
+<script defer type="text/javascript" src="../com/MSIE.PNG.js"></script>
+<![endif]-->
+
+</head>
+<body onload="onLoad()">
+<!--document.write输出 客户端测试+服务端测试(需要rewriter回传)-->
+<script>
+	document.write('<p><img src="images/product_logo.png" style="margin-right:5px;" /></p>');
+</script>
+<!--document.write输出完整页面 客户端测试+服务端测试(需要rewriter回传)-->
+<button onClick="onWrite()">Write Content</button>
+<script>
+	
+		function onWrite()
+		{
+			/*@cc_on @*/
+			/*@if (@_jscript_version >= 4)
+			   alert("JScript version 4 or better");
+			   @else @*/
+			   alert("You need a more recent script engine.");
+			/*@end @*/
+
+			var output = "<head><title>OutPut</title><script><\/script><\/head><body test='1'>Write Suc!";
+			document.write(output);
+			document.close();
+		}
+	</script>
+	
+
+	<p><img src="images/product_logo.png" style="margin-right:5px;" /></p>
+<!--setTimeout与flush_cache 客户端测试-->
+	<p><button onClick="onStartTimeoutPointer()">StartTimeout_fun_point</button></p>
+<p><button onClick="onStartTimeoutCode()">StartTimeoutCode</button></p>
+<p><button onClick="onStartTimeoutVBScript()">StartTimeoutVBScript</button></p>
+
+<script>
+	function onStartTimeoutPointer()
+	{
+		window.setTimeout(openWindow,1000);
+	}
+	
+	function onStartTimeoutCode()
+	{
+		window.setTimeout("openWindow('http://baidu.com/onStartTimeoutCode')",1000);
+	}
+	
+	function onStartTimeoutVBScript()
+	{
+		window.setTimeout("call window.open('http://baidu.com/onStartTimeoutVBScript')",1000,"VBScript");
+	}
+	
+	function openWindow(url)
+	{
+		!url && (url = "http://g.cn");
+		window.open(url);
+	}
+	
+</script>
+
+<!--href赋javascript空串 客户端测试-->
+<a href="http://g.cn" id="link1">testLink</a>
+	
+	<script>
+		document.getElementById("link1").href = "javascript:;"
+	</script>
+	
+<!--定时器触发与flush_cache 客户端测试-->	
+<script>
+	var timer = null;
+	function onStartInterval()
+	{
+		timer = window.setInterval(function(){
+			var xx = document.getElementById("t1");
+			document.getElementById("output").innerHTML += xx.innerText;
+		},500);
+	}
+	
+	
+	function onStopInterval()
+	{
+		if(timer)
+			window.clearInterval(timer);
+	}
+
+</script>
+
+<div id="t1" style="display:none;">
+	suc!
+</div>
+
+<div id="output">
+	
+</div>
+
+<button onClick="onStartInterval()">Start Interval</button>
+<button onClick="onStopInterval()">Stop Interval</button>
+
+<!--setAttribute测试 客户端测试-->
+<p><a href="http://g.cn" id="hover1" onClick="ReplaceUrl();">ReplaceUrl google</button></p>
+<p><a href="/test.html" id="hover2" ></a></p>
+<p><a href="../../../../test.html" id="hover3" ></a></p>
+
+
+<script>
+	function ReplaceUrl()
+	{
+		window.location.replace("http://google.cn");
+	}
+	
+	function onInit()
+	{
+		var name;
+		document.getElementById("hover1").setAttribute("href","http://www.google.com");
+	}
+	
+	
+</script>
+
+<!--支持outerHTML 客户端测试-->
+
+<div id="output" name="ouput">
+</div>
+<button  id="btn" onclick="onSetOuterHTML()">setOuterHTML</button>
+<script>
+	function onSetOuterHTML()
+	{
+		if(document.getElementById("output").outerHTML)
+		{
+			document.getElementById("output").outerHTML = "<p><div id='output_new'><a href='http://g.cn'>google</a></div></p>";
+			document.getElementById("btn").style.display = "none";
+		}
+		else
+		{
+			document.write("This browser does not support outerHTML");
+			document.close();
+		}
+	}
+</script>
+
+
+<!--EasyLink的URL重写测试 客户端测试+服务端测试-->		
+<pre>	
+	测试EasyLink SessionURL重写情况
+</pre>
+	<h1>服务端重写测试</h1>
+	<p><a  id="s1" href="test/a.html">相对地址</a></p>
+	<p><a  id="s2" href="https://www.google.com">普通完整路径</a></p>
+	<p><a  id="s2" href="http://www.google.com">普通完整路径</a></p>
+	<p><a  id="s3" href="http://www.google.com/abc">带子路径完整路径</a></p>
+	<p><a  id="s4" href="http://www.google.com/">带一个根目录</a></p>
+	<p><a  id="s5" href="http://200.200.72.50">当前域(不应该被重写)</a></p>
+	<p><a  id="s6" href="http://www.google.com1">不在映射表中域</a></p>
+	<p><a  id="s7" href="http://www.google.com/#123">带hash的URL</a></p>
+	<p><a  id="s8" href="http://www.google.com/?a=1#123">带querystring、hash的URL</a></p>
+	<p><a  id="s9" href="http://g.cn">普通URL</a></p>
+	<p><a  id="s10" href="//g.cn">//协议URL</a></p>
+	<p><a  id="s11" href="//not_easylink.cn">//非easylink URL</a></p>
+	<p><a  id="s12" href="http://200.200.0.20">端口映射</a></p>
+	<p><a  id="s13" href="http://200.200.72.50">域名映射</a></p>
+	<p><a  id="s14" href="http://lwq.self.com">端口映射</a></p>
+	<p><a  id="s15" href="http://bbs.self.com">端口映射</a></p>
+	
+	<h1>客户端重写测试</h1>
+	<p><a id="c1" href="test/a.html">相对地址</a></p>
+	<p><a id="c2" href="test">普通完整路径</a></p>
+	<p><a id="c3" href="test">带子路径完整路径</a></p>
+	<p><a id="c4" href="test">带一个根目录</a></p>
+	<p><a id="c5" href="test">当前域(不应该被重写)</a></p>
+	<p><a id="c6" href="test">不在映射表中域</a></p>
+	<p><a id="c7" href="test">带hash的URL</a></p>
+	<p><a id="c8" href="test">带querystring、hash的URL</a></p>
+	<p><a id="c9" href="test">普通URL</a></p>
+	<p><a  id="c10" href="//g.cn">//协议URL</a></p>
+	<p><a  id="c11" href="//not_easylink.cn">//非easylink URL</a></p>
+	<p><a  id="c12" href="http://200.200.0.20">端口映射</a></p>
+	<p><a  id="c13" href="http://200.200.72.50">域名映射</a></p>
+	<p><a  id="c14" href="http://lwq.self.com">端口映射</a></p>
+	<p><a  id="c15" href="http://bbs.self.com">端口映射</a></p>
+<script>
+	for(var i=1;i<=15;i++)
+	{
+		document.getElementById("c"+i).href = document.getElementById("s"+i).href
+	}
+</script>
+
+<!--支持createElement 客户端测试-->		
+<div>
+	看到图片说明重写正常。
+</div>
+<script>
+	<!--
+	var obj = document.createElement("<img src='../ref/images/logo.gif' >");
+	document.body.appendChild(obj);
+	-->
+</script>
+<!--flush_cache缓存测试 客户端测试-->		
+<h1>Rewriter count should equal 10</h1>
+<div id="output">
+</div>
+	<script>
+		var N = 5;
+		window.setInterval(onInterval1,100*N);
+		window.setInterval(onInterval2,200*N);
+		window.setInterval(onInterval3,300*N);
+		window.setInterval(onInterval4,300*N);
+		window.setInterval(onInterval5,500*N);
+		window.setInterval(onInterval6,600*N);
+		window.setInterval(onInterval7,700*N);
+		window.setInterval(onInterval8,800*N);
+		window.setInterval(onInterval9,900*N);
+		window.setInterval(onInterval10,1000*N);
+		
+		function onInterval1(){eval("$('output').innerHTML = '<br>Interval 1 ' + $('output').innerHTML");}
+		function onInterval2(){eval("$('output').innerHTML = '<br>Interval 2 '+ $('output').innerHTML");}
+		function onInterval3(){eval("$('output').innerHTML = '<br>Interval 3 '+ $('output').innerHTML");}
+		function onInterval4(){eval("$('output').innerHTML = '<br>Interval 4 '+ $('output').innerHTML");}
+		function onInterval5(){eval("$('output').innerHTML = '<br>Interval 5 '+ $('output').innerHTML");}
+		function onInterval6(){eval("$('output').innerHTML = '<br>Interval 6 '+ $('output').innerHTML");}
+		function onInterval7(){eval("$('output').innerHTML = '<br>Interval 7 '+ $('output').innerHTML");}
+		function onInterval8(){eval("$('output').innerHTML = '<br>Interval 8 '+ $('output').innerHTML");}
+		function onInterval9(){eval("$('output').innerHTML = '<br>Interval 9 '+ $('output').innerHTML");}
+		function onInterval10(){eval("$('output').innerHTML = '<br>Interval 10 '+ $('output').innerHTML");}
+		function Output(info)
+		{
+			document.getElementById('output').innerHTML = '<br>Interval 1 \n';
+		}
+		
+		function $(id)
+		{
+			return document.getElementById(id);
+		}
+	</script>
+<!--innerHTML 客户端测试-->		
+	
+		<textarea id="testinput" style="width:100%;height:200px;">
+	<div >
+		<a href="http://g.cn">testLink</a>
+		<img src="http://200.200.72.250:1000/html/img/product_logo.png" />
+	</div>
+	<script>
+	</script>
+	</textarea>
+	<textarea id="output" style="width:100%;height:200px;"></textarea>
+	<button onClick="onGetInnerHTML()">Get InnerHTML</button>
+	<button onClick="onGetInnerHTML()">Get InnerText</button>
+	<button onClick="onGetInnerHTML()">Get InnerValue</button>
+	<button onClick="onGetBodyInnerHTML()">GetBodyInnerHTML</button>
+	<script>
+		function onGetInnerHTML()
+		{
+			document.getElementById("output").innerText = document.getElementById("testinput").value;
+		}
+		
+		function onGetBodyInnerHTML()
+		{
+			document.getElementById("output").value = window.document.body.innerHTML;
+		}
+	</script>
+	
+<!--支持querySelectorAll 客户端测试-->		
+	<div>
+		<a href="http://g.cn">Link</a>
+	</div>
+	
+	<div sf_script="1">
+		<a href="http://2g.cn">Link</a>
+	</div>
+	
+	<textarea id="output"style="width:100%;height:200px">
+	</textarea>
+	<script>
+		var eles = document.querySelectorAll("div");
+		var outputStr = ""
+		for(var i=0;eles && i<eles.length;i++)
+		{
+			outputStr += eles[i].innerHTML;
+		}
+		
+		document.getElementById("output").innerText = outputStr;
+	</script>
+	
+<!--控件参数重写 客户端测试+服务端测试-->	
+	<p>
+<div id="output">
+</div>
+<h1>attribute conflict</h1>
+<p><button onClick="TestActiveSetURL()">TestActiveSetURL</button></p>
+<p><button onClick="TestActiveSetAppendURL()">TestActiveSetAppendURL</button></p>
+<p><button onClick="TestActiveGetURL()">TestActiveGetURL</button></p>
+<p><button onClick="TestDocumentSetURL()">TestDocumentSetURL</button></p>
+<p><button onClick="TestDocumentGetURL()">TestDocumentGetURL</button></p>
+
+<h1>method conflict</h1>
+<p><button onClick="TestActiveOpen()">TestActiveOpen</button></p>
+<p><button onClick="TestWindowOpen()">TestWindowOpen</button></p>
+
+</p>
+<script>
+
+	var g_ActiveXObj = null;
+	function onLoad()
+	{
+		try{	
+			g_ActiveXObj = new ActiveXObject("PluginUrlTest.MngUrl.1");
+		}catch(e)
+		{
+			document.getElementById("output").innerHTML = 'new ActiveXObject("PluginUrlTest.MngUrl.1") Error:'+e.message+"<br>You need to regsvr32 PluginUrlTest.dll and adjust the security polices.";
+		}
+	}
+	
+	function TestActiveSetURL()
+	{
+		if(!g_ActiveXObj)
+			return;
+		g_ActiveXObj.URL = "http://www.baidu.com";
+		g_ActiveXObj.FireGo();
+	}
+	
+	
+	function TestActiveSetAppendURL()
+	{
+		if(!g_ActiveXObj)
+			return;
+		g_ActiveXObj.URL = "";
+		g_ActiveXObj.URL +=  "http://www.baidu.com";
+		g_ActiveXObj.FireGo();
+	}
+	
+	
+	
+	function TestActiveGetURL()
+	{
+		if(!g_ActiveXObj)
+			return;
+		document.getElementById("output").innerHTML = 'TestActiveGetURL:'+g_ActiveXObj.URL;
+	}
+	
+	
+	function TestActiveOpen()
+	{
+		if(!g_ActiveXObj)
+			return;
+		g_ActiveXObj.open("http://www.baidu.com");
+	}
+	
+	function TestDocumentGetURL()
+	{
+		document.getElementById("output").innerHTML = 'document.URL:'+document.URL;
+	}
+	
+	function TestDocumentSetURL()
+	{
+		document.URL = "http://www.baidu.com";
+	}
+	
+	
+	
+	function TestWindowOpen()
+	{
+		window.open("http://www.baidu.com");
+	}
+</script>
+
+<!--select支持 客户端测试-->	
+<select id="select"></select>
+	<script type="text/javascript">
+	function init()
+	{
+		newOption_OK();
+		newOption_WRONG();
+		createElement_OPTION_OK();
+		createElement_OPTION_WRONG();
+	}
+	function newOption_OK()
+	{
+		var option = new Option('name', 'value');
+		document.getElementById('select').add(option,0);
+		var doc = option.document;
+	}
+	
+	function newOption_WRONG()
+	{
+		var option = new Option('name', 'value');
+		var doc = option.document;
+		document.getElementById('select').add(option,0);
+	}
+	
+	function createElement_OPTION_OK()
+	{
+		var oOption = document.createElement("OPTION");
+		document.getElementById('select').options.add(oOption);
+		oOption.innerText = "Two";
+		oOption.value = "2";
+	}
+	
+	function createElement_OPTION_WRONG()
+	{
+		var oOption = document.createElement("OPTION");
+		oOption.innerText = "Two";
+		oOption.value = "2";
+		document.getElementById('select').options.add(oOption);
+	}
+	</script>
+	
+<!--object嵌入其它待重写HTML标签 客户端测试-->	
+	<h2>普通img被重写</h1>
+<img src="http://200.200.0.20/cms/phpmv2/phpmyvisites.php" alt="Statistics" style="border:0" />
+<h1>object中的img不被重写</h1>
+<object>
+<param name="src" value="http://url" />
+<param name="src2" value="http://url" />
+<!--
+<noscript><p>phpMyVisites 免费的网站统计、流量分析软件
+ <img src="http://200.200.0.20/cms/phpmv2/phpmyvisites.php" alt="Statistics" style="border:0" />
+ </p></noscript>
+ -->
+ </object>
+ 
+ 
+ <!--new表达式里面的关键字不用重写，但是作为参数等的其它关键字要进行重写、SF_FUNC_GETATT重写的时候不加括号 客户端测试-->
+ <h3>1、new表达式里面的关键字不用重写，但是作为参数等的其它关键字要进行重写。</h1>
+<h3>2、SF_FUNC_GETATT重写的时候不加括号</h1>
+<script>
+
+var Ext={
+	cookie:{
+			Connection2:function()
+			{
+				this.IN_CONNECTION2 = true;
+				var yy = this;
+			},
+			Connection:function()
+			{
+				if(arguments.length == 1 && typeof(arguments[0])=='object')
+					document.writeln("<br>Ext.cookie.Connection构造函数:" + arguments[0].cookieFlag);
+					
+				this.ConnectionFlag = "<br>new Ext.cookie.Connection()实例化正常";
+				//alert("Origin Connection!");
+				var yy = this;
+			},
+			cookieFlag:'Ext.cookie.cookieFlag标记读取正常'
+			
+	},
+	locate:function(){
+		this.src ="oldValue";
+	},
+	getcookie:function()
+	{
+		this.IN_GETcookie = true;
+		if(typeof this.Connection != 'function')
+			this.Connection = function()
+			{
+				alert("Modified Connection!");
+			}
+		return this.cookie;
+	}
+}
+
+function SF_getcookie()
+{
+	this.SF_getcookie_flag = true;
+	return Ext.cookie;
+}
+
+
+var yy = new Ext.cookie.Connection(Ext.cookie);
+document.write(yy.ConnectionFlag);
+
+var zz = Ext.cookie;
+document.writeln("<br>" + zz.cookieFlag);
+
+//var xx = new (Ext.getcookie().Connection)();
+
+new Ext.locate().src = "url";//不需要重写
+
+function test()
+{
+	new ActiveXObject('CLSID').src ='url';
+}
+
+</script>
+
+<!--客户端JS函数自定义重写 客户端测试-->
+<div id="output">
+</div>
+<script>
+	/*String.prototype.match=function()
+	{
+		var xx = this;
+		return "new_str_prototype_replace";
+	};
+	*/
+	if(window["location"]["hostname"].match(/\.50/))
+		document.write("rewrite suc!!");
+	else
+		document.write("rewrite Err!!");
+		
+		
+	"test".match(/a/);
+</script>
+
+<!--测试location 客户端测试-->
+<p>
+<div id="output">
+</div>
+</p>
+<p><button id="btn8" onClick="EqualDocument_Window();">window.location==document.location</button></p>
+<p><button id="btn0" onClick="CopyCustomFunc();">CopyCustomFunc</button></p>
+<p><button id="btn1" onClick="ReplaceUrl();">ReplaceUrl google</button></p>
+<p><button id="btn2" onClick="AssignUrl();">AssignUrl google</button></p>
+<p><button id="btn3" onClick="ReloadUrl();">ReloadUrl google</button></p>
+<p><button id="btn3" onClick="ReloadUrlEx();">ReloadUrl Ex</button></p>
+<p><button id="btn4" onClick="SetLocation();">SetLocation google</button></p>
+<p><button id="btn5" onClick="SetLocationHref();">SetLocation.href google</button></p>
+<p><button id="btn6" onClick="SetWindowLocationHref();">SetWindow.Location.Href google</button></p>
+<p><button id="btn7" onClick="SetWindowLocation();">SetWindow.Location.Href google</button></p>
+<script>
+	var g_URL1 = "http://www.google.com";
+	var g_URL = "location.html";
+	
+	
+	function EqualDocument_Window()
+	{
+		if(window.location == document.location)
+			document.getElementById("output").innerHTML = "rewrite suc!!"
+		else
+			document.getElementById("output").innerHTML = "rewrite Fail!!";
+	}
+	
+	
+	function CopyCustomFunc()
+	{
+		window["location"].cusFun = function(){
+			return this.href+"###CUS_VALUE###";
+		};
+		
+		alert(window.location.cusFun());
+	}
+	
+	
+	function ReplaceUrl()
+	{
+		window.location.replace(g_URL1);
+	}
+	
+	function AssignUrl()
+	{
+		window.location.assign(g_URL1);
+	}
+	
+	function ReloadUrl()
+	{
+		window.location.reload();
+	}
+	
+	function ReloadUrlEx()
+	{
+		window.location.reload(true);
+	}
+	
+	function SetLocation()
+	{
+		location = g_URL1;
+	}
+	
+	function SetLocationHref()
+	{
+		location.href = g_URL1;
+	}
+	
+	function SetWindowLocationHref()
+	{
+		window.location.href = g_URL1;
+	}
+	
+	function SetWindowLocation()
+	{
+		window.location = g_URL1;
+	}
+	//document.write("测试get window.location.toString():"+location.toString()+"<p>");
+	//document.write("测试get window.location."+ document.location +"<p>" );
+	//document.write("测试get location:"+ location +"<p>" );
+	document.write("测试get location.host:"+ document.location.hostname +"<p>" );
+	
+</script>
+
+<h1>modify location attributes</h1>
+	<p><BUTTON onClick="onHash()">hash</button></p>
+	<p><BUTTON onClick="onHashEx()">#hash</button></p>
+	<p><BUTTON onClick="onHashFullPath()">hash fullpath</button></p>
+	<p><BUTTON onClick="onSearch()">search</button></p>
+	<p><BUTTON onClick="onSearchEx()">?search</button></p>
+	<p><BUTTON onClick="onHost()">host</button></p>
+	<p><BUTTON onClick="onHostEx()">host_port</button></p>
+	<p><BUTTON onClick="onHostName()">hostname</button></p>
+	<p><BUTTON onClick="onHref()">href</button></p>
+	<p><BUTTON onClick="onPort()">port</button></p>
+	<p><BUTTON onClick="onPortEx()">:port</button></p>
+  <script>
+	
+	function PrintCusLocation()
+	{
+		var info = "SF_LOCATION:\n"
+		if(!window["SF_LOCATION"])
+			info = "no window.SF_LOCATION object";
+			
+		for(var key in window["SF_LOCATION"])
+		{
+			if(typeof(window["SF_LOCATION"][key])=="function")
+				continue;
+			info += key + ":" + window["SF_LOCATION"][key] + "<br/>";
+		}
+		
+		document.getElementById("output").innerHTML = info;
+	}
+	
+	function onHash()
+	{
+		window.location.hash="onHash";
+		PrintCusLocation();
+		
+	}
+	
+	function onHashEx()
+	{
+		window.location.hash="#onHashEx";
+		PrintCusLocation();
+		
+	}
+	
+	function onHashFullPath()
+	{
+		window.location.href="http://200.200.72.50/testcase/web_test_case/html/location.html#hashFullPath";
+		PrintCusLocation();
+	}
+	
+	function onSearch()
+	{
+		window.location.search="wwsearch";
+		PrintCusLocation();
+	}
+	
+	function onSearchEx()
+	{
+		window.location.search="?SearchEx";
+		PrintCusLocation();
+	}
+	
+	function onHost()
+	{
+		window.location.host="lwq.self.com";
+		PrintCusLocation();
+	}
+	
+	function onHostEx()
+	{
+		window.location.host="lwq.self.com:8080";
+		PrintCusLocation();
+	}
+	
+	function onHostName()
+	{
+		window.location.hostname="lwq.self.com";
+		PrintCusLocation();
+	}
+	
+	function onHref()
+	{
+		window.location="http://lwq.self.com";
+		PrintCusLocation();
+	}
+	
+	function onPort()
+	{
+		window.location.port="8080";
+		PrintCusLocation();
+	}
+	
+	function onPortEx()
+	{
+		window.location.port=":80";
+		PrintCusLocation();
+	}
+	
+</script>
+
+<!--测试filter中包含Microsoft.AlphaImageLoader相对地址选择，客户端测试-->
+<h1>测试滤镜在脚本下使用不要还原，因为ie6下面常常需要做png兼容处理，所以如在脚本处理的时候，我们不能还原这个地址,抓包看到
+有请求不是设备地址说明错了
+</h1>
+注意图片地址必须是完整地址才会有问题
+<img src = "http://200.200.72.54:8082/images/btn.png" id="pic1" />
+<div id="pic2" style="width:300px;height:300px"></div>
+<script>
+function $(id){
+	return document.getElementById(id);
+}
+window.onload = function(){
+	$("pic2").style.filter+="progid:DXImageTransform.Microsoft.AlphaImageLoader(src="+$("pic1").src+", sizingmethod=scale);" 
+}
+</script>
+
+<div id="a1"></div>
+<script type="text/javascript">
+	function ready()
+	{
+		var div='<a href="http://www.baidu.com/">Baidu</a><p><img src="http://200.200.72.150:1000/html/img/product_logo.png" style="margin-right:5px;" /></p>';
+		if(document.body.insertAdjacentHTML)
+			document.body.insertAdjacentHTML('beforeEnd',div);
+		else
+		{
+			document.write("This browser does not support insertAdjacentHTML");
+			document.close();
+		}
+	}
+</script>
+
+<p><br></p> 
+<p id="Output">output</p> 
+
+<script language="JavaScript"> 
+function OutputText() 
+{ 
+
+ document.getElementById("Output").innerHTML='在此处输出文本:<a href="http://200.200.0.20">bbs</a><br><a href="http://www.baidu.com">baidu</a>按钮测试<button onclick=window.open("http://google.cn"); name="button" value="google"/>';
+ 
+}//function 
+
+</script> 
+<!--测试iframe.write 覆盖document 测试客户端-->
+<iframe id="iframe1" name="iframe1" ></iframe>
+<script>
+function replace()
+{
+    var docObj =iframe1.window.document.open('text/html','replace');
+	var htmlTxt = "<html><head>\r\n\
+						\r\n\
+						<body>\r\n\
+						<script>document.write('<a href=\"http://g.cn\">')<\/script>\r\n\
+						<script>document.write('FlashCache_WriteLink<a/><br>')<\/script>\r\n\
+					<a href='http://g.cn'>testaa<\/a>\r\n\
+					<\/body><\/html>\r\n";
+	docObj.write(htmlTxt);
+	docObj.close();
+}
+</script>
+<button onClick="replace();">Ok</button>
+<a href="http://www.google.com">Google</a>
+
+
+<iframe src="javascript:function aa(){};aa();document.write('<html><body><a href=http://g.cn>tddd<\/a><p><script>document.write(1);<\/script><p><\/p><script><\/script></p><\/body><\/html>');document.write('<a href=baidu.com>baidu</a>');document.close();">
+</iframe>
+<!--测试iframe.src=javascript:xxx,测试客户端-->
+<p>
+<button onClick="onCreateFrame()">Create Frame</button>
+</p>
+<script>
+	function onCreateFrame()
+	{
+		var frmObj = document.createElement("iframe");
+		frmObj.src="javascript:document.write('<html><body><a href=http://g.cn>new<\/a><p><script>document.write(1);document.close();<\/script><p><\/p><script><\/script></p><\/body><\/html>');document.write('<a href=baidu.com>baidu</a>');document.close();"
+		document.body.appendChild(frmObj);
+	}
+</script>
+
+<!--测试iframe覆盖document回传GBK内容-->
+<iframe id="iframe1"></iframe>
+<script>
+	onTest();
+	function onTest()
+	{
+	 var CONTENT_TMPL = '<!doctype html>' +
+                        '<html>' +
+                        '<head>' +
+                        '<title>Rich Text Area<\/title>' +
+                        '<meta http-equiv="content-type" content="text/html; charset=gbk" />' +
+                        '<script>window.onerror = function() { return true; };<\/script>'+
+                        '<\/head>' +
+                        '<body spellcheck="false" class="ks-editor-post">a中国a<\/body>' +
+                        '<\/html>';
+	
+	var obj = document.getElementById("iframe1").contentWindow.document;
+	obj.open();
+	//回传有问题。
+	obj.write(CONTENT_TMPL);
+	
+	//不回传没有问题
+	//obj["write"](CONTENT_TMPL);
+	obj.close();
+	}
+</script>
+
+<form>
+			<p>Only digits can be entered into the text box below.</p>
+		
+			<input type="text" style="behavior:url('InputInteger.htc')" />
+		
+		</form>
+<!--测试getAttribute函数支持，客户端测试-->		
+<p><a href="http://g.cn" id="hover1" onClick="ReplaceUrl();">ReplaceUrl google</button></p>
+<p><a href="/test.html" id="hover2" >second</a></p>
+<p><a href="../../../../test.html" id="hover3" >third</a></p>
+<p><a href="../../../test.html" id="hover4" >forth</a></p>
+
+
+<script>
+	function ReplaceUrl()
+	{
+		window.location.replace("http://g.cn");
+	}
+	
+	document.write("<h1>No flag:</h1>");
+	for(var i=1;i<=3;i++)
+	{
+		document.write("<br>hover"+i+".href:" + document.getElementById("hover"+i).getAttribute("href"));
+	}
+	document.write("<br>hover"+1+".onClick:" + document.getElementById("hover"+1).getAttribute("onClick"));
+	
+	document.write("<h1>With flag:</h1>");
+	for(var i=1;i<=3;i++)
+	{
+		document.write("<br>hover"+i+".href:" + document.getElementById("hover"+i).getAttribute("href",0));
+	}
+	document.write("<br>hover"+1+".onClick:" + document.getElementById("hover"+1).getAttribute("onClick",0));
+</script>
+<!--测试自定义JS关键字与websvc.conf相同情况，客户端测试-->
+<div id="output">
+</div>
+<script>
+
+function Cookie()
+{
+	this.a = 1;
+}
+
+function getCookie()
+{
+	return new Cookie();
+}
+
+function test2()
+{
+	var obj ={}
+	obj.cookie = new Cookie();
+	var b = ++obj.cookie.a
+	var c = obj.cookie.a++;
+	var a = b;
+	//obj.cookie = getCookie()
+	//++obj.cookie.a;
+	var xx = ++getCookie().a;
+	//++obj.cookie.a++;
+	var zz = getCookie().a++;
+	var ww = xx;
+}
+
+function test()
+{
+	try
+	{
+		this.cookie = 1;
+		this.cookie ++;//不重写
+		++ this.cookie;
+		var a = 1;
+		var ww = a + this.cookie;//重写
+		var c = a+++this.cookie++//不重写
+		var d = a+++ ++ this.cookie;//不重写
+		
+		if(this.cookie ===5
+		&& a === 3
+		&& c === 4
+		&& d === 7
+		)
+		{
+			document.getElementById("output").innerHTML = "重写成功！";
+			return;
+		}
+	}
+	catch(e){}
+	document.getElementById("output").innerHTML = "重写出错！";
+}
+test();
+test2();
+</script>
+<!--测试函数指针传递，客户端测试+服务端测试-->
+<p><button onClick="onWinOpen();">window.open</button></p>
+<p><button onClick="onWrite();">document.write</button></p>
+<p><button onClick="onWriteln();">document.writeln</button></p>
+<p><button onClick="onEval();">eval</button></p>
+<p><button onClick="onExecScript();">execScript</button></p>
+
+
+<script>
+var url = 'http://g.cn';
+function onWinOpen()
+{
+	var xx  = window.open;
+	xx(url);
+}
+
+function onWrite()
+{
+	var xx  = document.write;
+	xx("<a href='"+url+"'>onWrite_Link</a>");
+	
+}
+
+function onWriteln()
+{
+	var xx  = document.writeln;
+	xx("<a href='"+url+"'>onWrite_Link</a>");
+}
+
+
+function onEval()
+{
+	var xx  = window.eval;
+	xx("window.open('"+url+"')");
+}
+
+
+function onExecScript()
+{
+	var xx  = window.execScript;
+	xx("window.open('"+url+"')");
+}
+
+//onWrite();
+
+</script>
+<!--测试Function函数支持，客户端测试+服务端测试-->
+<p><button id="btn">open google</button></p>
+<p><button id="btn2">open google(with parameter)</button></p>
+<p><button id="btn3">open google(new window.Function)</button></p>
+<p><button id="btn4" onclick="onBtn4()">custom function</button></p>
+<p><button id="btn5" onclick="onBtn5()">function without new</button></p>
+<div id="output">
+	
+</div>
+<script>
+	document.getElementById("btn").onclick = new Function('window.open("http://g.cn");');
+	document.getElementById("btn2").onclick = function(){
+		var fun = new Function('url','window.open(url);');
+		fun('http://g.cn');
+	};
+	
+	
+	document.getElementById("btn3").onclick = new window.Function("a",'b','window.open("http://g.cn");');
+	
+	function echo(info)
+	{
+		document.getElementById("output").innerHTML += info + "<br/>";
+	}
+	
+	function onBtn4()
+	{
+		Y ={
+			DataSource:{
+				Function:function(value){this.a = value;}
+			}
+		};
+		
+		var x1 = new Y.DataSource.Function(1219);
+		if(x1.a == 1219)
+			echo("custom function:rewrite ok!");
+		else
+			echo("custom function:rewrite err.");
+	}
+	
+	function onBtn5()
+	{
+		var fun = Function("return 1219");
+		if(typeof(fun) == "function" && fun()==1219)
+			echo("function without new:rewrite ok!");
+		else
+			echo("function without new:rewrite err.");
+	}
+	
+</script>
+<!--测试frameset、frame中脚本嵌入，客户端测试+服务端测试-->
+<FRAMESET COLS="50%, 50%">
+<FRAME SRC="javascript:document.write('<html><body><h1>aaa<\/h1><a href=http://g.cn>tddd<\/a><\/body><\/html>');">
+<FRAME SRC="javascript:document.write('<html><body><h1>content<\/h1><a href=http://g.cn>tddd<\/a><\/body><\/html>');">
+</FRAMESET>
+
+<!--测试iframe与location，客户端测试+服务端测试-->
+<iframe  name="frame1" src="javascript:;">
+</iframe>
+
+<p><button onClick="onSetFrameLocation()">Set Frame_win.Location</button></p>
+<p><button onClick="onTopDocumentLocation()">top.Location===document.location?</button></p>
+<p><button onClick="onDocumentTopLocation()">document.location===top.Location?</button></p>
+
+<script>
+	function onSetFrameLocation()
+	{
+		frame1.location = window.location;
+	}
+	
+	function onTopDocumentLocation()
+	{
+		if(top.location !== document.location)
+			document.location = document.location;
+	}
+	
+	function onDocumentTopLocation()
+	{
+		if(document.location !== top.location)
+			document.location = top.location;
+	}
+</script>
+
+<!--测试flash_cache支持，客户端测试+服务端测试-->
+<div style="display:none;"  name="testDiv" id="testDiv">
+	document.all flash_cache Suc!
+</div>
+<script src="include.js"></script>
+
+<script>
+	test_open();
+	
+function test_document_get()
+{
+	var obj = document.all.testDiv;
+	obj = document.anchors;
+	obj = document.applets;
+	obj = document.childNodes;
+	obj = document.forms;
+	obj = document.embeds;
+	obj = document.frames;
+	obj = document.images;
+	obj = document.links;
+	obj = document.namespaces;
+	obj = document.scripts;
+	obj = document.styleSheets;
+	obj = document.scripts;
+}
+	var objTest = eval("document.all.testDiv");
+	document.writeln("<br>");
+	document.writeln(objTest.innerHTML);
+
+</script>
+
+<script src="include_write.js"></script>
+<button onclick="a();">静态事件绑定输出</button>
+<button  id="dynaid">动态事件绑定输出</button>
+<script>
+	function a()
+    {
+        document.write("<a");
+        document.write(" href='http://g.cn' id='ttt' >");
+        document.write(" 重写失败</a>");
+		document.getElementById("ttt").innerHTML = "重写成功";
+		document.write("<br>");
+		document.write("<a");
+        document.write(" href='http://gw2.cn' id='ttt1' >");
+        document.write(" gw2</a>");
+		document.close();
+	}    
+</script>
+<p>
+    <script>   
+    
+    
+	function dynamic()
+	{
+		document.write("<a id='fun_dynamic_tlink' ");
+        document.write(" href='http://g.cn' >");
+        document.write(" 如果看到这个，重写失败</a>");
+		document.write("<br>");
+		document.getElementById("fun_dynamic_tlink").innerHTML = "如果看到这个就算重写成功!";
+		document.write("<a id='fun_dynamic_tlink2' ");
+        document.write(" href='http://tslseg.cn' >");
+        document.write(" tslsgs</a>");
+		document.close();
+	}
+    
+	var obj = document.getElementById("dynaid");
+	if(obj.attachEvent)
+		obj.attachEvent("onclick",dynamic);
+	else
+		obj.addEventListener("click",dynamic,false);
+		
+	document.write("<a id='fun_dynamic_tlink' ");
+	document.write(" href='http://g.cn' >");
+	document.write(" script节点顺序片断式内容</a>");
+</script>
+
+<!--测试覆盖document回传，客户端测试+服务端测试-->
+<script>
+//sdfsdfd
+/*sdfasfds*/
+function replace()
+{
+    var docObj = document.open('text/html','replace');
+	var htmlTxt = "<html><head><\/head>\r\n\
+						<body>\r\n\
+						<script>document.write('<a href=\"http://g.cn\">');document.write('FlashCache_WriteLink<a/><br>');<\/script>\r\n\
+					<a href='http://g.cn'>test<\/a>\r\n\
+					<\/body><\/html>\r\n";
+	
+	docObj.write(htmlTxt);
+	docObj.close();
+}
+</script>
+<button onClick="replace();">Ok</button>
+<a href="http://www.google.com?abc=1">Google</a>
+
+<p><button>no need to click</button></p>
+<p><a href="/test.html" id="hover2" ></a></p>
+<p><a href="test.html" id="hover3" ></a></p>
+
+<!--测试evaluate支持，客户端测试-->
+<div id="output">
+</div>
+<script>
+
+if(document.evaluate)
+{
+	XPathResult.prototype.snapshotItem
+	var results = [];
+	var query = document.evaluate("//*", document,null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	var count = 0;
+	for (var i = 0, length = query.snapshotLength; i < length; i++)
+	{
+		var item = query.snapshotItem(i);
+		results.push(query.snapshotItem(i));
+		if(item.getAttribute("sf_script"))
+			count ++;
+	}
+	if(count > 0)
+		document.getElementById("output").innerHTML = "Err," + count+ " sf_script were found";
+	else
+		document.getElementById("output").innerHTML = "Success!";
+} 
+else
+	document.getElementById("output").innerHTML = "This browser does not support document.evaluate";
+</script>
+<!--测试Eval回传重写，客户端测试+服务端测试-->
+<script language="JavaScript"> 
+function OutputText() 
+{ 
+var url="window.open('http://google.cn');";
+eval(url);
+
+ 
+}//function 
+
+var gotoURL= function (){
+	window.open("http://200.200.72.150")
+};
+
+
+function test() 
+{ 
+
+eval("gotoURL();");
+
+ 
+}//function 
+
+function test2() 
+{ 
+	window.execScript("gotoURL();");
+}//function 
+</script> 
+
+<!--测试AJAX对象支持，客户端测试-->
+<p><br></p> 
+<p id="Output">在此处输出文本：</p> 
+<a href="#" onclick="test();">点击</a>
+
+<textarea style="width:100%;height:200px" id="output">
+</textarea>
+	<script>
+	(function()
+	{
+		if (typeof XMLHttpRequest == 'undefined') 
+		{
+			XMLHttpRequest = function () 
+			{
+				var msxmls = ['MSXML3', 'MSXML2', 'Microsoft'];
+				if(navigator.userAgent.indexOf("MSIE 5") >=0 )
+				{
+					msxmls = ['Microsoft','MSXML3', 'MSXML2' ]
+				}
+				for (var i=0; i < msxmls.length; i++) 
+				{
+					try 
+					{
+						return new ActiveXObject(msxmls[i]+'.XMLHTTP')
+
+					} 
+					catch (e) 
+					{}
+				}
+				return null;
+			}
+		}
+	})();
+	
+	
+	function post_http(url,sbody,method,func)
+	{
+		func = func===undefined?new Function():func;
+		var xmlhttp  = null;
+		try{
+			xmlhttp = new XMLHttpRequest();
+			if(xmlhttp == null){
+				return "";
+			}
+		}
+		catch(e)
+		{
+			return "";
+		}
+		
+		if((method != null)&&(method.toUpperCase()=="GET" || method.toUpperCase()=="POST"))
+		{
+			method = method.toUpperCase();	
+		}
+		else
+		{
+			method = "GET";
+		}
+		var IsAsynch = false;
+		if(arguments.length > 3 && typeof(arguments[3])=='boolean')
+		{
+			IsAsynch = arguments[3];
+		}
+		xmlhttp.open(method, url+"?"+Math.random() , IsAsynch);	// false=synch
+		xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		try{
+			if (sbody){
+				xmlhttp.send(sbody);
+			}else{
+				xmlhttp.send(null);
+			}
+		}
+		catch(e)
+		{
+			return "";
+		}
+
+		if((xmlhttp.readyState == 4) && (xmlhttp.status == 200))
+		{
+			func(xmlhttp.responseText ? xmlhttp.responseText : "");
+			return (xmlhttp.responseText ? xmlhttp.responseText : "");
+		}
+		else
+		{
+			return "0";
+		}
+	}
+	
+	post_http('custom_xmlhttprequest.html',null,"POST",function(responseText)
+	{
+		document.getElementById("output").value = responseText;
+	})
+	
+	
+	</script>
+	
+<!--测试自定义关键字支持，客户端测试-->
+	<h2>1.not support WINDOW PHONE6.5</h2>
+<script>
+	var obj = new function(){};
+	obj.cookie = function()
+	{
+		document.write("Rewrite Suc");
+	};
+	obj.cookie();
+</script>
+
+
+<!--测试支持indexOf等字符操作函数，客户端重写-->
+<script>
+		
+		function test()
+		{
+			var str="braveboytestboy";
+			var subStr = "test";
+			//alert("call:"+String.prototype.indexOf.call(str,subStr));
+			//alert("apply:"+String.prototype.indexOf.apply(str,[subStr]));
+			alert("normal:" + str.indexOf(subStr));
+		}
+		
+		test();
+	</script>
+	
+	<p><button id="btn1">按钮１</button>
+按钮１有模糊效果则重写正常
+</p>
+<p><button id="btn2">按钮２</button>
+按钮２有图片作背景则重写正常
+</p>
+
+<!--测试对createElement的支持，这个主要是客户端服务端只是按配置来重写-->
+<div>
+	<H1>看到图片说明重写正常。</h1>
+	注意：FireFox下不支持这种写法
+</div>
+<script>
+	var obj = document.createElement("<img src='../ref/images/logo.gif' >");
+	document.body.appendChild(obj);
+</script>
+
+<script>
+<!--
+//</script>
+var a = "</script>";
+alert(a);
+-->
+</script>
+<!--测试全局函数、Function实例出来的函数-->
+<p><button onClick="full_open()">full_open</button></p>
+<p><button onClick="global_open()">global_open</button></p>
+<p><button onClick="new_Function()">new_Function</button></p>
+
+
+
+<script>
+	function full_open()
+	{
+		window.open('http://200.200.0.20');
+	}
+	
+	
+	function global_open()
+	{
+		open('http://200.200.0.20');
+	}
+	
+	
+	function new_Function()
+	{
+		var ff = new Function("document.write('call new instance open ok!')");
+		ff();
+	}
+	
+	
+</script>
+
+<!--测试按钮和href等触发事件与返回值-->
+<p>
+<div id="output">
+</div>
+<h1>attribute conflict</h1>
+<p><button onClick=TestSimple()>TestSimple</button></p>
+<p><a href="javascript:function attr_inner(){return(document.URL)};attr_inner()">href:Return without space</a></p>
+<p><a href=javascript:RtnWithoutSpace()>href:Return without space</a></p>
+
+<script>
+	function TestSimple()
+	{
+		document.getElementById("output").innerHTML = "call succ!";
+	}
+	
+	
+	function RtnWithoutSpace()
+	{
+		window.open(innerFun());
+		function innerFun()
+		{
+			return(window.location).href;
+		}
+	}
+</script>
+<!--测试href+javascript+target重写方式-->
+<FRAMESET rows="70%,50%" onload="alert('parent onload!');">
+   <FRAME name="dynamic" src="anchor_sub_frame.html">
+   <FRAME name="show" src="about:blank">
+</FRAMESET>
+
+	<p><a href="javascript:alert('typeof(tttt)=' + typeof(tttt));window.open('http://200.200.0.20')" target='_blank'>href+javascript+双引号</a></p>
+	<p><a href='javascript:window.open("http://200.200.0.20")' target='_blank'>单引号</a></p>
+	<p><a onClick='window.open("http://200.200.0.20")' target='_blank'>OnClick</a></p>
+	<p><a onClick="window.open('http://200.200.0.20')" href="#" target='_blank'>OnClick#</a></p>
+	<p><a onClick=window.open("http://200.200.0.20") href="#" target='_blank'>OnClick#</a></p>
+	<p><a onClick='javascript:alert("typeof(tttt)=" + typeof(tttt));window.open("http://200.200.0.20")'  target='_blank'>OnClick:javascript+#</a></p>
+	<p><a href=javascript:window.open("http://200.200.0.20") target='_blank'>无引号</a></p>
+	<p><a href=javascript:window.location="/testcase/m55/html/" target='show'>iframe+无引号</a></p>
+	<p><button onClick="window.open('http://200.200.0.20')"></button></p>
+	<iframe src="http://200.200.72.50" onload="alert('sub iframe onload!');"></iframe>
+	
+
+
+<!--测试服务端对新增addImport节点重写-->
+<script>
+document.createStyleSheet().addImport("http://200.200.72.50/testcase/M55/html/style.css");
+
+document.createStyleSheet().addImport("http://200.200.72.54:8082/style.css");
+</script>
+
+<!--测试服务端JS控件参数重写-->
+<button onClick="onOpenBBS()">Open BBS</button>
+<script language="javascript">
+function onOpenBBS()
+{
+	var activex_test = new ActiveXObject("Project1.ActiveX控件测试");
+	activex_test.attribute1 = "http://200.200.0.20";
+	activex_test.gotoAttribute1();
+}
+</script>
+
+<!--测试服务端object标签重写-->
+ <object id="tt"
+			classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			data="http://200.200.0.20/test/wind/test.cab" 
+            type="image/jpeg"
+            width="100%" height="200"> 
+		<param name="url1" value="http://200.200.31.131"/>
+		<param name="url2" value="http://www.google.com">
+		
+    </object> 
+
+<!--测试服务端object中嵌入embed标签重写-->
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" width="100%" height="100%"> 
+<param name="movie" value="Test.swf" /> 
+<param name="quality" value="high" /> 
+<embed 
+	id="test"
+	src="Test.swf?url1=http://200.200.0.20&url2=www.google.com" 
+	param1="www.google.com"
+	quality="high" 
+	pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" 
+	type="application/x-shockwave-flash" width="100%" height="100%">
+	</embed> 
+</object> 
+
+<!--embed标签重写 服务端测试-->
+<embed src="flash_test.swf?url1=www.google.com&url2=www.baidu.com"
+	quality="high"
+	bgcolor="#ffffff"
+	width="960"
+	height="750"
+	name="FlashVars"
+	align="middle"
+	allowScriptAccess="sameDomain"
+	swLiveConnect="true"
+	FlashVars="content1=liyang&content2=http://200.200.0.20&click_button1=http://200.200.31.131"
+	type="application/x-shockwave-flash"
+	pluginspage="http://www.macromedia.com/go/getflashplayer" >
+
+<!--flash修正测试-使用object标签嵌入 服务端测试-->
+<object 
+	src="flash_test.swf?url1=www.google.com&url2=www.baidu.com"
+	classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+	codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+	width="100%"
+	height="700"
+	id="flash_test"
+	align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+
+<param name="quality" value="high" />
+<param name="bgcolor" value="#ffffff" />
+<param name="FlashVars" value="content2=http://200.200.0.20&click_button1=http://200.200.31.131" />
+</object>
+
+
+<!--flash修正测试-使用object标签嵌入，data作标识 服务端测试-->
+<object 
+	data="flash_test.swf?url1=www.google.com&url2=www.baidu.com"
+	classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+	codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+	width="100%"
+	height="700"
+	id="flash_test"
+	align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#ffffff" />
+<param name="FlashVars" value="content2=http://200.200.0.20&click_button1=http://200.200.31.131" />
+</object>
+
+<!--flash修正测试-使用object标签嵌入，movie作标识 服务端测试-->
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+	codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+	width="100%"
+	height="700"
+	id="flash_test"
+	align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="movie" value="flash_test.swf?url1=www.google.com&url2=www.baidu.com" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#ffffff" />
+<param name="FlashVars" value="content2=http://200.200.0.20&click_button1=http://200.200.31.131" />
+</object>
+
+<!--flash修正测试-使用object标签嵌入，src作标识 服务端测试-->
+<object 
+	src="flash_test.swf?url1=www.google.com&url2=www.baidu.com"
+	classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+	codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0"
+	width="100%"
+	height="700"
+	id="flash_test"
+	align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#ffffff" />
+<param name="FlashVars" value="content2=http://200.200.0.20&click_button1=http://200.200.31.131" />
+</object>
+
+<!--object重写，archive作标识，服务端测试-->
+<object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" 
+        width="100%" height="50">
+  <param name="archive" value="FieldTestF.jar">
+  <param name="code" value="FieldTestF">
+</object>
+
+<!--object重写，java_code作标识，服务端测试-->
+<object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" 
+        width="100%" height="50">
+  <param name="java_code" value="abc.class">
+</object>
+
+<!--Applet节点重写 服务端测试-->
+<applet codebase="." 
+            code="Applet_test.class" 
+            name="applet_test" 
+            width="1000" 
+            height="300">
+      <param name="title" value="深信服强大的M5.0测试页面。。">
+      <param name="button1" value="到bbs">
+      <param name="button2" value="去看看TD">
+      <param name="button3" value="去看看google">
+      <param name="button4" value="上ftp去下片">
+      <param name="button5" value="上qq">
+      <param name="button6" value="发邮件给李洋">
+      <param name="button7" value="上文件共享">
+      <param name="button8" value="test">
+	  <param name="button1_value" value="http://200.200.0.20">
+      <param name="button2_value" value="http://200.200.0.23/tdbin">
+      <param name="button3_value" value="http://www.google.com">
+      <param name="button4_value" value="ftp://200.200.31.108">
+      <param name="button5_value" value="http://web.qq.com">
+      <param name="button6_value" value="mailto:liyang@sangfor.com">
+      <param name="button7_value" value="\\200.200.0.3">
+	  <param name="button8_value" value="http://www.sinfors.com">
+</applet>
+
+<!--数据岛 服务端测试-->
+<xml id="cdcat" src="data_island.xml"></xml>
+
+<!--VB Script节点 服务端测试-->
+<script type="text/vbscript">
+	window.open("http://g.cn")
+</script>
+
+
+</body>
+</html>                        

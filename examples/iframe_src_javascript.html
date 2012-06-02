@@ -1,0 +1,26 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<iframe src="javascript:function aa(){};aa();document.write('<html><body><a href=http://g.cn>tddd<\/a><p><script>document.write(1);<\/script><p><\/p><script><\/script></p><\/body><\/html>');document.write('<a href=baidu.com>baidu</a>');document.close();">
+</iframe>
+
+<p>
+<button onClick="onCreateFrame()">Create Frame</button>
+</p>
+<script>
+	function onCreateFrame()
+	{
+		var frmObj = document.createElement("iframe");
+		frmObj.src="javascript:document.write('<html><body><a href=http://g.cn>new<\/a><p><script>document.write(1);document.close();<\/script><p><\/p><script><\/script></p><\/body><\/html>');document.write('<a href=baidu.com>baidu</a>');document.close();"
+		document.body.appendChild(frmObj);
+	}
+</script>
+</BODY>
+</html>
+
+
+
+
+

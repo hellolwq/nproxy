@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<TITLE>Popup Example</TITLE>
+</HEAD>
+<BODY>
+<button onclick="a();">静态事件绑定输出</button>
+<button  id="dynaid">动态事件绑定输出</button>
+<a href="http://200.200.0.20">bbs</a>
+<a href="http://200.200.200.20">bbs_not_exists</a>
+<script>
+	function a()
+    {
+        document.write("<a");
+        document.write(" href='http://g.cn' id='ttt' >");
+        document.write(" 重写失败</a>");
+		document.getElementById("ttt").innerHTML = "重写成功";
+		document.write("<br>");
+		document.write("<a");
+        document.write(" href='http://gw2.cn' id='ttt1' >");
+        document.write(" gw2</a>");
+		document.close();
+	}    
+</script>
+<p>
+    <script>   
+    
+    
+	function dynamic()
+	{
+		document.write("<a id='fun_dynamic_tlink' ");
+        document.write(" href='http://g.cn' >");
+        document.write(" 如果看到这个，重写失败</a>");
+		document.write("<br>");
+		document.getElementById("fun_dynamic_tlink").innerHTML = "如果看到这个就算重写成功!";
+		document.write("<a id='fun_dynamic_tlink2' ");
+        document.write(" href='http://tslseg.cn' >");
+        document.write(" tslsgs</a>");
+		document.close();
+	}
+    
+	var obj = document.getElementById("dynaid");
+	if(obj.attachEvent)
+		obj.attachEvent("onclick",dynamic);
+	else
+		obj.addEventListener("click",dynamic,false);
+		
+	document.write("<a id='fun_dynamic_tlink' ");
+	document.write(" href='http://g.cn' >");
+	document.write(" script节点顺序片断式内容</a>");
+</script>
+
+
+</BODY>
+</HTML>

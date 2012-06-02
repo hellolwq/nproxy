@@ -1,0 +1,50 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+
+<body>
+<h1>Rewriter count should equal 10</h1>
+<div id="output">
+</div>
+	<script>
+		var N = 5;
+		window.setInterval(onInterval1,100*N);
+		window.setInterval(onInterval2,200*N);
+		window.setInterval(onInterval3,300*N);
+		window.setInterval(onInterval4,300*N);
+		window.setInterval(onInterval5,500*N);
+		window.setInterval(onInterval6,600*N);
+		window.setInterval(onInterval7,700*N);
+		window.setInterval(onInterval8,800*N);
+		window.setInterval(onInterval9,900*N);
+		window.setInterval(onInterval10,1000*N);
+		
+		function onInterval1(){eval("$('output').innerHTML = '<br>Interval 1 ' + $('output').innerHTML");}
+		function onInterval2(){eval("$('output').innerHTML = '<br>Interval 2 '+ $('output').innerHTML");}
+		function onInterval3(){eval("$('output').innerHTML = '<br>Interval 3 '+ $('output').innerHTML");}
+		function onInterval4(){eval("$('output').innerHTML = '<br>Interval 4 '+ $('output').innerHTML");}
+		function onInterval5(){eval("$('output').innerHTML = '<br>Interval 5 '+ $('output').innerHTML");}
+		function onInterval6(){eval("$('output').innerHTML = '<br>Interval 6 '+ $('output').innerHTML");}
+		function onInterval7(){eval("$('output').innerHTML = '<br>Interval 7 '+ $('output').innerHTML");}
+		function onInterval8(){eval("$('output').innerHTML = '<br>Interval 8 '+ $('output').innerHTML");}
+		function onInterval9(){eval("$('output').innerHTML = '<br>Interval 9 '+ $('output').innerHTML");}
+		function onInterval10(){eval("$('output').innerHTML = '<br>Interval 10 '+ $('output').innerHTML");}
+		function Output(info)
+		{
+			document.getElementById('output').innerHTML = '<br>Interval 1 \n';
+		}
+		
+		function $(id)
+		{
+			return document.getElementById(id);
+		}
+	</script>
+</body>
+
+</html>
+
+
+
+
+

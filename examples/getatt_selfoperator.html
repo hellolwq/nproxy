@@ -1,0 +1,66 @@
+<html>
+
+<head>
+</head>
+<body>
+<div id="output">
+</div>
+<script>
+
+function Cookie()
+{
+	this.a = 1;
+}
+
+function getCookie()
+{
+	return new Cookie();
+}
+
+function test2()
+{
+	var obj ={}
+	obj.cookie = new Cookie();
+	var b = ++obj.cookie.a
+	var c = obj.cookie.a++;
+	var a = b;
+	//obj.cookie = getCookie()
+	//++obj.cookie.a;
+	var xx = ++getCookie().a;
+	//++obj.cookie.a++;
+	var zz = getCookie().a++;
+	var ww = xx;
+}
+
+function test()
+{
+	try
+	{
+		this.cookie = 1;
+		this.cookie ++;//不重写
+		++ this.cookie;
+		var a = 1;
+		var ww = a + this.cookie;//重写
+		var c = a+++this.cookie++//不重写
+		var d = a+++ ++ this.cookie;//不重写
+		
+		if(this.cookie ===5
+		&& a === 3
+		&& c === 4
+		&& d === 7
+		)
+		{
+			document.getElementById("output").innerHTML = "重写成功！";
+			return;
+		}
+	}
+	catch(e){}
+	document.getElementById("output").innerHTML = "重写出错！";
+}
+test();
+test2();
+</script>
+</body>
+
+
+</html>                        

@@ -1,0 +1,28 @@
+#btn2
+{
+	background:url(../images/btn.png) no-repeat -150px -60px;
+	height:26px;
+	width:48px;
+}
+
+#btn1
+{
+	width:48px;
+    height:26px;
+    filter:progid:DXImageTransform.Microsoft.MotionBlur(strength=50) progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/btn.png', sizingMethod='scale') ;
+}
+
+
+#btn122
+{
+	background:url(../images/btn.png) no-repeat -150px -60px;
+	height:26px;
+	width:48px;
+}
+
+#btn123
+{
+	width:48px;
+    height:26px;
+    filter:progid:DXImageTransform.Microsoft.MotionBlur(strength=50) progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/btn.png', sizingMethod='scale') ;
+}

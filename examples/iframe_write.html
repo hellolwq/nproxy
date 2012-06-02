@@ -1,0 +1,25 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<iframe id="iframe1" name="iframe1" ></iframe>
+<script>
+function replace()
+{
+    var docObj =iframe1.window.document.open('text/html','replace');
+	var htmlTxt = "<html><head>\r\n\
+						\r\n\
+						<body>\r\n\
+						<script>document.write('<a href=\"http://g.cn\">')<\/script>\r\n\
+						<script>document.write('FlashCache_WriteLink<a/><br>')<\/script>\r\n\
+					<a href='http://g.cn'>testaa<\/a>\r\n\
+					<\/body><\/html>\r\n";
+	docObj.write(htmlTxt);
+	docObj.close();
+}
+</script>
+<button onClick="replace();">Ok</button>
+<a href="http://www.google.com">Google</a>
+</BODY>
+</html>

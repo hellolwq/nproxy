@@ -1,0 +1,61 @@
+<HTML>
+<script language="JavaScript" src="/com/svpn_websvc_functions.js" sf_script="1"></script>
+<script type="text/vbscript" src="/com/svpn_websvc_functions.vbs" sf_script="1"></script><script sf_script="1"></script>
+
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<TITLE>Popup Example</TITLE>
+</HEAD>
+<BODY>
+<script language="JavaScript" src="/com/svpn_fnb.js" sf_script="1"></script><script sf_script="1"></script>
+
+<button onclick="var SF_FUNC_cache_flush_tmp=SF_FUNC_cache_flush;a();SF_FUNC_cache_flush_tmp();">静态事件绑定输出</button>
+<button  id="dynaid">动态事件绑定输出</button>
+<script>
+	function a()
+    {
+        SF_FUNC_CALLFUNC(document,0000+2,this,"<a");
+        SF_FUNC_CALLFUNC(document,0000+2,this," href='http://g.cn' id='ttt' >");
+        SF_FUNC_CALLFUNC(document,0000+2,this," 重写失败</a>");
+		SF_FUNC_SETATT(SF_FUNC_CALLFUNC(document,00000+68,this,"ttt"),000000+9, "重写成功");
+		SF_FUNC_CALLFUNC(document,0000+2,this,"<br>");
+		SF_FUNC_CALLFUNC(document,0000+2,this,"<a");
+        SF_FUNC_CALLFUNC(document,0000+2,this," href='http://gw2.cn' id='ttt1' >");
+        SF_FUNC_CALLFUNC(document,0000+2,this," gw2</a>");
+		SF_FUNC_CALLFUNC(document,00000+70,this);
+	}    
+;if(typeof(SF_FUNC_cache_flush)=='function')SF_FUNC_cache_flush();
+</script>
+<p>
+    <script>   
+    
+    
+	function dynamic()
+	{
+		SF_FUNC_CALLFUNC(document,0000+2,this,"<a id='fun_dynamic_tlink' ");
+        SF_FUNC_CALLFUNC(document,0000+2,this," href='http://g.cn' >");
+        SF_FUNC_CALLFUNC(document,0000+2,this," 如果看到这个，重写失败</a>");
+		SF_FUNC_CALLFUNC(document,0000+2,this,"<br>");
+		SF_FUNC_SETATT(SF_FUNC_CALLFUNC(document,00000+68,this,"fun_dynamic_tlink"),000000+9, "如果看到这个就算重写成功!");
+		SF_FUNC_CALLFUNC(document,0000+2,this,"<a id='fun_dynamic_tlink2' ");
+        SF_FUNC_CALLFUNC(document,0000+2,this," href='http://tslseg.cn' >");
+        SF_FUNC_CALLFUNC(document,0000+2,this," tslsgs</a>");
+		SF_FUNC_CALLFUNC(document,00000+70,this);
+	}
+    
+	var obj = SF_FUNC_CALLFUNC(document,00000+68,this,"dynaid");
+	if(SF_FUNC_GETATT(obj,000000+35))
+		SF_FUNC_CALLFUNC(obj,00+35,this,"onclick",dynamic);
+	else
+		SF_FUNC_CALLFUNC(obj,0000000+36,this,"click",dynamic,false);
+		
+	SF_FUNC_CALLFUNC(document,0000+2,this,"<a id='fun_dynamic_tlink' ");
+	SF_FUNC_CALLFUNC(document,0000+2,this," href='http://g.cn' >");
+	SF_FUNC_CALLFUNC(document,0000+2,this," script节点顺序片断式内容</a>");
+;if(typeof(SF_FUNC_cache_flush)=='function')SF_FUNC_cache_flush();
+</script>
+
+
+</BODY>
+</HTML>
+<script language="javascript" sf_script="1">if(typeof(SF_FUNC_Page_End)=='function')SF_FUNC_Page_End();</script>

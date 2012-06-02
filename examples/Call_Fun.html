@@ -1,0 +1,41 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><button onClick="full_open()">full_open</button></p>
+<p><button onClick="global_open()">global_open</button></p>
+<p><button onClick="new_Function()">new_Function</button></p>
+
+
+
+<script>
+	function full_open()
+	{
+		window.open('http://200.200.0.20');
+	}
+	
+	
+	function global_open()
+	{
+		open('http://200.200.0.20');
+	}
+	
+	
+	function new_Function()
+	{
+		var ff = new Function("document.write('call new instance open ok!')");
+		ff();
+	}
+	
+	
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

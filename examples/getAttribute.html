@@ -1,0 +1,40 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><a href="http://g.cn" id="hover1" onClick="ReplaceUrl();">ReplaceUrl google</button></p>
+<p><a href="/test.html" id="hover2" >second</a></p>
+<p><a href="../../../../test.html" id="hover3" >third</a></p>
+<p><a href="../../../test.html" id="hover4" >forth</a></p>
+
+
+<script>
+	function ReplaceUrl()
+	{
+		window.location.replace("http://g.cn");
+	}
+	
+	document.write("<h1>No flag:</h1>");
+	for(var i=1;i<=3;i++)
+	{
+		document.write("<br>hover"+i+".href:" + document.getElementById("hover"+i).getAttribute("href"));
+	}
+	document.write("<br>hover"+1+".onClick:" + document.getElementById("hover"+1).getAttribute("onClick"));
+	
+	document.write("<h1>With flag:</h1>");
+	for(var i=1;i<=3;i++)
+	{
+		document.write("<br>hover"+i+".href:" + document.getElementById("hover"+i).getAttribute("href",0));
+	}
+	document.write("<br>hover"+1+".onClick:" + document.getElementById("hover"+1).getAttribute("onClick",0));
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

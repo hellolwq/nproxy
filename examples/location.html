@@ -1,0 +1,198 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY onload="PrintCusLocation();">
+<p>
+<div id="output">
+</div>
+</p>
+<p><button id="btn8" onClick="EqualDocument_Window();">window.location==document.location</button></p>
+<p><button id="btn0" onClick="CopyCustomFunc();">CopyCustomFunc</button></p>
+<p><button id="btn1" onClick="ReplaceUrl();">ReplaceUrl google</button></p>
+<p><button id="btn2" onClick="AssignUrl();">AssignUrl google</button></p>
+<p><button id="btn3" onClick="ReloadUrl();">ReloadUrl google</button></p>
+<p><button id="btn3" onClick="ReloadUrlEx();">ReloadUrl Ex</button></p>
+<p><button id="btn4" onClick="SetLocation();">SetLocation google</button></p>
+<p><button id="btn5" onClick="SetLocationHref();">SetLocation.href google</button></p>
+<p><button id="btn6" onClick="SetWindowLocationHref();">SetWindow.Location.Href google</button></p>
+<p><button id="btn7" onClick="SetWindowLocation();">SetWindow.Location.Href google</button></p>
+<script>
+	var g_URL1 = "http://www.google.com";
+	var g_URL = "location.html";
+	
+	
+	function EqualDocument_Window()
+	{
+		if(window.location == document.location)
+			document.getElementById("output").innerHTML = "rewrite suc!!"
+		else
+			document.getElementById("output").innerHTML = "rewrite Fail!!";
+	}
+	
+	
+	function CopyCustomFunc()
+	{
+		window["location"].cusFun = function(){
+			return this.href+"###CUS_VALUE###";
+		};
+		
+		alert(window.location.cusFun());
+	}
+	
+	
+	function ReplaceUrl()
+	{
+		window.location.replace(g_URL1);
+	}
+	
+	function AssignUrl()
+	{
+		window.location.assign(g_URL1);
+	}
+	
+	function ReloadUrl()
+	{
+		window.location.reload();
+	}
+	
+	function ReloadUrlEx()
+	{
+		window.location.reload(true);
+	}
+	
+	function SetLocation()
+	{
+		location = g_URL1;
+	}
+	
+	function SetLocationHref()
+	{
+		location.href = g_URL1;
+	}
+	
+	function SetWindowLocationHref()
+	{
+		window.location.href = g_URL1;
+	}
+	
+	function SetWindowLocation()
+	{
+		window.location = g_URL1;
+	}
+	//document.write("测试get window.location.toString():"+location.toString()+"<p>");
+	//document.write("测试get window.location."+ document.location +"<p>" );
+	//document.write("测试get location:"+ location +"<p>" );
+	document.write("测试get location.host:"+ document.location.hostname +"<p>" );
+	
+</script>
+
+<h1>modify location attributes</h1>
+	<p><BUTTON onClick="onHash()">hash</button></p>
+	<p><BUTTON onClick="onHashEx()">#hash</button></p>
+	<p><BUTTON onClick="onHashFullPath()">hash fullpath</button></p>
+	<p><BUTTON onClick="onSearch()">search</button></p>
+	<p><BUTTON onClick="onSearchEx()">?search</button></p>
+	<p><BUTTON onClick="onHost()">host</button></p>
+	<p><BUTTON onClick="onHostEx()">host_port</button></p>
+	<p><BUTTON onClick="onHostName()">hostname</button></p>
+	<p><BUTTON onClick="onHref()">href</button></p>
+	<p><BUTTON onClick="onPort()">port</button></p>
+	<p><BUTTON onClick="onPortEx()">:port</button></p>
+  <script>
+	
+	function PrintCusLocation()
+	{
+		var info = "SF_LOCATION:\n"
+		if(!window["SF_LOCATION"])
+			info = "no window.SF_LOCATION object";
+			
+		for(var key in window["SF_LOCATION"])
+		{
+			if(typeof(window["SF_LOCATION"][key])=="function")
+				continue;
+			info += key + ":" + window["SF_LOCATION"][key] + "<br/>";
+		}
+		
+		document.getElementById("output").innerHTML = info;
+	}
+	
+	function onHash()
+	{
+		window.location.hash="onHash";
+		PrintCusLocation();
+		
+	}
+	
+	function onHashEx()
+	{
+		window.location.hash="#onHashEx";
+		PrintCusLocation();
+		
+	}
+	
+	function onHashFullPath()
+	{
+		window.location.href="http://200.200.72.50/testcase/web_test_case/html/location.html#hashFullPath";
+		PrintCusLocation();
+	}
+	
+	function onSearch()
+	{
+		window.location.search="wwsearch";
+		PrintCusLocation();
+	}
+	
+	function onSearchEx()
+	{
+		window.location.search="?SearchEx";
+		PrintCusLocation();
+	}
+	
+	function onHost()
+	{
+		window.location.host="lwq.self.com";
+		PrintCusLocation();
+	}
+	
+	function onHostEx()
+	{
+		window.location.host="lwq.self.com:8080";
+		PrintCusLocation();
+	}
+	
+	function onHostName()
+	{
+		window.location.hostname="lwq.self.com";
+		PrintCusLocation();
+	}
+	
+	function onHref()
+	{
+		window.location="http://lwq.self.com";
+		PrintCusLocation();
+	}
+	
+	function onPort()
+	{
+		window.location.port="8080";
+		PrintCusLocation();
+	}
+	
+	function onPortEx()
+	{
+		window.location.port=":80";
+		PrintCusLocation();
+	}
+	
+</script>
+
+
+
+</BODY>
+</html>
+
+
+
+
+

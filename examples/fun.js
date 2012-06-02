@@ -1,0 +1,1 @@
+function test_open(){	document.write("include flash_cache Suc!");	window.open('http://g.cn');}

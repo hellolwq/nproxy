@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY onload="onInit();">
+<p><a href="http://g.cn" id="hover1" onClick="ReplaceUrl();">ReplaceUrl google</button></p>
+<p><a href="/test.html" id="hover2" ></a></p>
+<p><a href="../../../../test.html" id="hover3" ></a></p>
+
+
+<script>
+	function ReplaceUrl()
+	{
+		window.location.replace("http://google.cn");
+	}
+	
+	function onInit()
+	{
+		var name;
+		document.getElementById("hover1").setAttribute("href","http://www.google.com");
+	}
+	
+	
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

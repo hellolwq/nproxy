@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<pre>	
+	测试EasyLink SessionURL重写情况
+</pre>
+	<h1>服务端重写测试</h1>
+	<p><a  id="s1" href="test/a.html">相对地址</a></p>
+	<p><a  id="s2" href="https://www.google.com">普通完整路径</a></p>
+	<p><a  id="s2" href="http://www.google.com">普通完整路径</a></p>
+	<p><a  id="s3" href="http://www.google.com/abc">带子路径完整路径</a></p>
+	<p><a  id="s4" href="http://www.google.com/">带一个根目录</a></p>
+	<p><a  id="s5" href="http://200.200.72.50">当前域(不应该被重写)</a></p>
+	<p><a  id="s6" href="http://www.google.com1">不在映射表中域</a></p>
+	<p><a  id="s7" href="http://www.google.com/#123">带hash的URL</a></p>
+	<p><a  id="s8" href="http://www.google.com/?a=1#123">带querystring、hash的URL</a></p>
+	<p><a  id="s9" href="http://g.cn">普通URL</a></p>
+	<p><a  id="s10" href="//g.cn">//协议URL</a></p>
+	<p><a  id="s11" href="//not_easylink.cn">//非easylink URL</a></p>
+	<p><a  id="s12" href="http://200.200.0.20">端口映射</a></p>
+	<p><a  id="s13" href="http://200.200.72.50">域名映射</a></p>
+	<p><a  id="s14" href="http://lwq.self.com">端口映射</a></p>
+	<p><a  id="s15" href="http://bbs.self.com">端口映射</a></p>
+	
+	<h1>客户端重写测试</h1>
+	<p><a id="c1" href="test/a.html">相对地址</a></p>
+	<p><a id="c2" href="test">普通完整路径</a></p>
+	<p><a id="c3" href="test">带子路径完整路径</a></p>
+	<p><a id="c4" href="test">带一个根目录</a></p>
+	<p><a id="c5" href="test">当前域(不应该被重写)</a></p>
+	<p><a id="c6" href="test">不在映射表中域</a></p>
+	<p><a id="c7" href="test">带hash的URL</a></p>
+	<p><a id="c8" href="test">带querystring、hash的URL</a></p>
+	<p><a id="c9" href="test">普通URL</a></p>
+	<p><a  id="c10" href="//g.cn">//协议URL</a></p>
+	<p><a  id="c11" href="//not_easylink.cn">//非easylink URL</a></p>
+	<p><a  id="c12" href="http://200.200.0.20">端口映射</a></p>
+	<p><a  id="c13" href="http://200.200.72.50">域名映射</a></p>
+	<p><a  id="c14" href="http://lwq.self.com">端口映射</a></p>
+	<p><a  id="c15" href="http://bbs.self.com">端口映射</a></p>
+<script>
+	for(var i=1;i<=15;i++)
+	{
+		document.getElementById("c"+i).href = document.getElementById("s"+i).href
+	}
+</script>
+</BODY>
+</html>
+
+
+
+
+

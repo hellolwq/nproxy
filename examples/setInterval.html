@@ -1,0 +1,45 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+<script>
+	var timer = null;
+	function onStartInterval()
+	{
+		timer = window.setInterval(function(){
+			var xx = document.getElementById("t1");
+			document.getElementById("output").innerHTML += xx.innerText;
+		},500);
+	}
+	
+	
+	function onStopInterval()
+	{
+		if(timer)
+			window.clearInterval(timer);
+	}
+
+</script>
+
+</HEAD>
+<BODY>
+<div id="t1" style="display:none;">
+	suc!
+</div>
+
+<div id="output">
+	
+</div>
+
+<button onClick="onStartInterval()">Start Interval</button>
+<button onClick="onStopInterval()">Stop Interval</button>
+
+
+
+
+</BODY>
+</html>
+
+
+
+
+

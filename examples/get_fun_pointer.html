@@ -1,0 +1,59 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><button onClick="onWinOpen();">window.open</button></p>
+<p><button onClick="onWrite();">document.write</button></p>
+<p><button onClick="onWriteln();">document.writeln</button></p>
+<p><button onClick="onEval();">eval</button></p>
+<p><button onClick="onExecScript();">execScript</button></p>
+
+
+<script>
+var url = 'http://g.cn';
+function onWinOpen()
+{
+	var xx  = window.open;
+	xx(url);
+}
+
+function onWrite()
+{
+	var xx  = document.write;
+	xx("<a href='"+url+"'>onWrite_Link</a>");
+	
+}
+
+function onWriteln()
+{
+	var xx  = document.writeln;
+	xx("<a href='"+url+"'>onWrite_Link</a>");
+}
+
+
+function onEval()
+{
+	var xx  = window.eval;
+	xx("window.open('"+url+"')");
+}
+
+
+function onExecScript()
+{
+	var xx  = window.execScript;
+	xx("window.open('"+url+"')");
+}
+
+//onWrite();
+
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

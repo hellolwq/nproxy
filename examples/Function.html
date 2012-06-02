@@ -1,0 +1,60 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><button id="btn">open google</button></p>
+<p><button id="btn2">open google(with parameter)</button></p>
+<p><button id="btn3">open google(new window.Function)</button></p>
+<p><button id="btn4" onclick="onBtn4()">custom function</button></p>
+<p><button id="btn5" onclick="onBtn5()">function without new</button></p>
+<div id="output">
+	
+</div>
+<script>
+	document.getElementById("btn").onclick = new Function('window.open("http://g.cn");');
+	document.getElementById("btn2").onclick = function(){
+		var fun = new Function('url','window.open(url);');
+		fun('http://g.cn');
+	};
+	
+	
+	document.getElementById("btn3").onclick = new window.Function("a",'b','window.open("http://g.cn");');
+	
+	function echo(info)
+	{
+		document.getElementById("output").innerHTML += info + "<br/>";
+	}
+	
+	function onBtn4()
+	{
+		Y ={
+			DataSource:{
+				Function:function(value){this.a = value;}
+			}
+		};
+		
+		var x1 = new Y.DataSource.Function(1219);
+		if(x1.a == 1219)
+			echo("custom function:rewrite ok!");
+		else
+			echo("custom function:rewrite err.");
+	}
+	
+	function onBtn5()
+	{
+		var fun = Function("return 1219");
+		if(typeof(fun) == "function" && fun()==1219)
+			echo("function without new:rewrite ok!");
+		else
+			echo("function without new:rewrite err.");
+	}
+	
+</script>
+</BODY>
+</html>
+
+
+
+
+

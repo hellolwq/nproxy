@@ -1,0 +1,18 @@
+<html>
+
+<head>
+</head>
+<body>
+<div id="output">
+</div>
+<button onClick="onLogin();">µÇÂ¼</button>
+<script>
+	function onLogin()
+	{
+		window.location.href="main.php";
+	}
+</script>
+</body>
+
+
+</html>                        

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<h1>测试滤镜在脚本下使用不要还原，因为ie6下面常常需要做png兼容处理，所以如在脚本处理的时候，我们不能还原这个地址,抓包看到
+有请求不是设备地址说明错了
+</h1>
+注意图片地址必须是完整地址才会有问题
+<img src = "http://200.200.72.54:8082/images/btn.png" id="pic1" />
+<div id="pic2" style="width:300px;height:300px"></div>
+</body>
+</html>
+<script>
+function $(id){
+	return document.getElementById(id);
+}
+window.onload = function(){
+	$("pic2").style.filter+="progid:DXImageTransform.Microsoft.AlphaImageLoader(src="+$("pic1").src+", sizingmethod=scale);" 
+}
+</script>

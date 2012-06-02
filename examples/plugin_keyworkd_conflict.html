@@ -1,0 +1,92 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY onload="onLoad()">
+
+<p>
+<div id="output">
+</div>
+<h1>attribute conflict</h1>
+<p><button onClick="TestActiveSetURL()">TestActiveSetURL</button></p>
+<p><button onClick="TestActiveSetAppendURL()">TestActiveSetAppendURL</button></p>
+<p><button onClick="TestActiveGetURL()">TestActiveGetURL</button></p>
+<p><button onClick="TestDocumentSetURL()">TestDocumentSetURL</button></p>
+<p><button onClick="TestDocumentGetURL()">TestDocumentGetURL</button></p>
+
+<h1>method conflict</h1>
+<p><button onClick="TestActiveOpen()">TestActiveOpen</button></p>
+<p><button onClick="TestWindowOpen()">TestWindowOpen</button></p>
+
+</p>
+<script>
+
+	var g_ActiveXObj = null;
+	function onLoad()
+	{
+		try{	
+			g_ActiveXObj = new ActiveXObject("PluginUrlTest.MngUrl.1");
+		}catch(e)
+		{
+			document.getElementById("output").innerHTML = 'new ActiveXObject("PluginUrlTest.MngUrl.1") Error:'+e.message+"<br>You need to regsvr32 PluginUrlTest.dll and adjust the security polices.";
+		}
+	}
+	
+	function TestActiveSetURL()
+	{
+		if(!g_ActiveXObj)
+			return;
+		g_ActiveXObj.URL = "http://www.baidu.com";
+		g_ActiveXObj.FireGo();
+	}
+	
+	
+	function TestActiveSetAppendURL()
+	{
+		if(!g_ActiveXObj)
+			return;
+		g_ActiveXObj.URL = "";
+		g_ActiveXObj.URL +=  "http://www.baidu.com";
+		g_ActiveXObj.FireGo();
+	}
+	
+	
+	
+	function TestActiveGetURL()
+	{
+		if(!g_ActiveXObj)
+			return;
+		document.getElementById("output").innerHTML = 'TestActiveGetURL:'+g_ActiveXObj.URL;
+	}
+	
+	
+	function TestActiveOpen()
+	{
+		if(!g_ActiveXObj)
+			return;
+		g_ActiveXObj.open("http://www.baidu.com");
+	}
+	
+	function TestDocumentGetURL()
+	{
+		document.getElementById("output").innerHTML = 'document.URL:'+document.URL;
+	}
+	
+	function TestDocumentSetURL()
+	{
+		document.URL = "http://www.baidu.com";
+	}
+	
+	
+	
+	function TestWindowOpen()
+	{
+		window.open("http://www.baidu.com");
+	}
+</script>
+</BODY>
+</html>
+
+
+
+
+

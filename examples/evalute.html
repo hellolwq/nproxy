@@ -1,0 +1,43 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><button>no need to click</button></p>
+<p><a href="/test.html" id="hover2" ></a></p>
+<p><a href="test.html" id="hover3" ></a></p>
+
+<div id="output">
+</div>
+<script>
+
+if(document.evaluate)
+{
+	XPathResult.prototype.snapshotItem
+	var results = [];
+	var query = document.evaluate("//*", document,null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	var count = 0;
+	for (var i = 0, length = query.snapshotLength; i < length; i++)
+	{
+		var item = query.snapshotItem(i);
+		results.push(query.snapshotItem(i));
+		if(item.getAttribute("sf_script"))
+			count ++;
+	}
+	if(count > 0)
+		document.getElementById("output").innerHTML = "Err," + count+ " sf_script were found";
+	else
+		document.getElementById("output").innerHTML = "Success!";
+} 
+else
+	document.getElementById("output").innerHTML = "This browser does not support document.evaluate";
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

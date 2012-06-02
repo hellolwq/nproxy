@@ -1,0 +1,42 @@
+﻿<html> 
+<head> 
+<title></title> 
+<style><!-- 
+body {font-family:"宋体";color="blue";font-size:"9pt"} 
+.blue {color:blue;font-size:9pt} 
+--> 
+</style> 
+<script language="JavaScript"> 
+function OutputText() 
+{ 
+var url="window.open('http://google.cn');";
+eval(url);
+
+ 
+}//function 
+
+var gotoURL= function (){
+	window.open("http://200.200.72.150")
+};
+
+
+function test() 
+{ 
+
+eval("gotoURL();");
+
+ 
+}//function 
+
+function test2() 
+{ 
+	window.execScript("gotoURL();");
+}//function 
+</script> 
+</head> 
+<body onload="OutputText();"> 
+<p><br></p> 
+<p id="Output">在此处输出文本：</p> 
+<a href="#" onclick="test();">点击</a>
+</body> 
+</html>

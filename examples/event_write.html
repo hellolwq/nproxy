@@ -1,0 +1,30 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<script>
+//sdfsdfd
+/*sdfasfds*/
+function replace()
+{
+    var docObj = document.open('text/html','replace');
+	var htmlTxt = "<html><head><\/head>\r\n\
+						<body>\r\n\
+						<script>document.write('<a href=\"http://g.cn\">');document.write('FlashCache_WriteLink<a/><br>');<\/script>\r\n\
+					<a href='http://g.cn'>test<\/a>\r\n\
+					<\/body><\/html>\r\n";
+	
+	docObj.write(htmlTxt);
+	docObj.close();
+}
+</script>
+<button onClick="replace();">Ok</button>
+<a href="http://www.google.com?abc=1">Google</a>
+</BODY>
+</html>
+
+
+
+
+

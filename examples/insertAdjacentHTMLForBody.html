@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title></title>
+
+</head>
+<body onload="ready();">
+	<div id="a1"></div>
+</body>
+</html>
+<script type="text/javascript">
+	function ready()
+	{
+		var div='<a href="http://www.baidu.com/">Baidu</a><p><img src="http://200.200.72.150:1000/html/img/product_logo.png" style="margin-right:5px;" /></p>';
+		if(document.body.insertAdjacentHTML)
+			document.body.insertAdjacentHTML('beforeEnd',div);
+		else
+		{
+			document.write("This browser does not support insertAdjacentHTML");
+			document.close();
+		}
+	}
+</script>

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+
+<body>
+	<div>
+		<a href="http://g.cn">Link</a>
+	</div>
+	
+	<div sf_script="1">
+		<a href="http://2g.cn">Link</a>
+	</div>
+	
+	<textarea id="output"style="width:100%;height:200px">
+	</textarea>
+	<script>
+		var eles = document.querySelectorAll("div");
+		var outputStr = ""
+		for(var i=0;eles && i<eles.length;i++)
+		{
+			outputStr += eles[i].innerHTML;
+		}
+		
+		document.getElementById("output").innerText = outputStr;
+	</script>
+</body>
+	
+</html>
+
+
+
+
+

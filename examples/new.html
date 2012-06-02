@@ -1,0 +1,70 @@
+<html>
+
+<head>
+</head>
+<body>
+<h3>1、new表达式里面的关键字不用重写，但是作为参数等的其它关键字要进行重写。</h1>
+<h3>2、SF_FUNC_GETATT重写的时候不加括号</h1>
+<script>
+
+var Ext={
+	cookie:{
+			Connection2:function()
+			{
+				this.IN_CONNECTION2 = true;
+				var yy = this;
+			},
+			Connection:function()
+			{
+				if(arguments.length == 1 && typeof(arguments[0])=='object')
+					document.writeln("<br>Ext.cookie.Connection构造函数:" + arguments[0].cookieFlag);
+					
+				this.ConnectionFlag = "<br>new Ext.cookie.Connection()实例化正常";
+				//alert("Origin Connection!");
+				var yy = this;
+			},
+			cookieFlag:'Ext.cookie.cookieFlag标记读取正常'
+			
+	},
+	locate:function(){
+		this.src ="oldValue";
+	},
+	getcookie:function()
+	{
+		this.IN_GETcookie = true;
+		if(typeof this.Connection != 'function')
+			this.Connection = function()
+			{
+				alert("Modified Connection!");
+			}
+		return this.cookie;
+	}
+}
+
+function SF_getcookie()
+{
+	this.SF_getcookie_flag = true;
+	return Ext.cookie;
+}
+
+
+var yy = new Ext.cookie.Connection(Ext.cookie);
+document.write(yy.ConnectionFlag);
+
+var zz = Ext.cookie;
+document.writeln("<br>" + zz.cookieFlag);
+
+//var xx = new (Ext.getcookie().Connection)();
+
+new Ext.locate().src = "url";//不需要重写
+
+function test()
+{
+	new ActiveXObject('CLSID').src ='url';
+}
+
+</script>
+</body>
+
+
+</html>                        

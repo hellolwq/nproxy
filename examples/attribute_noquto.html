@@ -1,0 +1,36 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY >
+
+<p>
+<div id="output">
+</div>
+<h1>attribute conflict</h1>
+<p><button onClick=TestSimple()>TestSimple</button></p>
+<p><a href="javascript:function attr_inner(){return(document.URL)};attr_inner()">href:Return without space</a></p>
+<p><a href=javascript:RtnWithoutSpace()>href:Return without space</a></p>
+
+<script>
+	function TestSimple()
+	{
+		document.getElementById("output").innerHTML = "call succ!";
+	}
+	
+	
+	function RtnWithoutSpace()
+	{
+		window.open(innerFun());
+		function innerFun()
+		{
+			return(window.location).href;
+		}
+	}
+</script>
+</BODY>
+</html>
+
+
+
+
+

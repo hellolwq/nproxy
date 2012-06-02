@@ -1,0 +1,14 @@
+<html>
+<body>
+
+<p><a onclick="var bexxx = new function(){};bexxx.value=19;alert(10%bexxx.value);">onclick，正常结果为弹出10</a>
+<p><a href="javascript:alert('弹出窗口')%3Bwindow.open('http://200.200.0.20')%3B">函数open弹出链接<a>
+<p><a href="javascript:alert('弹出窗口')%3Bwindow.location='http://200.200.0.20'%3B">左值location转向链接<a>
+<p><a href="javascript:%3Balert((function(){return window.document.location.href%3B})())%3B">读右值，单纯alert<a>
+<p><a href="javascript:%3B%3B%3Bwindow.document.location='http://200.200.0.20'%3B%3B%3B">多转义字符串<a>
+<p><a href="javascript:%3Blocation='http://200.200.0.20'%3B">全局属性左值<a>
+<p><a href="javascript:%3Balert((function(){return location%3B})())%3B">全局属性右值<a>
+<p><a href="javascript:%3Bopen('http://200.200.0.20')%3B">全局函数open弹出链接<a>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<public:component>
+
+<!-- InputInteger Behavior Sample (Public Domain)
+     by David Pinch (http://www.thoughtproject.com/Snippets/InputInteger/)
+     
+     This sample demonstrates a simple HTC behavior that forces all input
+     to be a positive integer.  You can use this HTC behavior as a template
+     for creating more complex ones. -->
+         
+<public:attach event="onkeypress" onevent="handleKeyPress()"/>
+<PUBLIC:ATTACH EVENT="ondocumentready" ONEVENT="init()"/>
+
+<script language="JavaScript">
+<!--
+
+/* =======================================================================
+   handleKeyPress
+   -----------------------------------------------------------------------
+   This event handler is executed whenever the onkeypress event is fired
+   from the input box.
+   ======================================================================= */
+   
+  
+function init()
+{
+	this.tFun = function(){
+		alert("tFun");
+	};
+	
+	this.attachEvent("onmouseover",function(){
+		this.tFun();
+	}
+	);
+}
+
+function handleKeyPress() {
+
+  // ASCII key codes:
+  //
+  //   CR  = 13 (Carriage Return)
+  //   "0" = 48
+  //   "1" = 49
+  //   "2" = 50
+  //   "3" = 51
+  //   "4" = 52
+  //   "5" = 53
+  //   "6" = 54
+  //   "7" = 55
+  //   "8" = 56
+  //   "9" = 57
+  
+  var keyCode = event.keyCode;
+  
+  // Cancel the key if it is not a number.  Do not cancel
+  // the key if it is the Enter/Return key.
+  
+  if( 
+      ((keyCode < 48) || (keyCode > 57)) && (keyCode != 13) )
+      
+    event.keyCode=0;
+}
+
+-->
+</script>
+</public:component>

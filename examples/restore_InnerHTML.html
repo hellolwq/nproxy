@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+
+<body>
+	<textarea id="testinput" style="width:100%;height:200px;">
+	<div >
+		<a href="http://g.cn">testLink</a>
+		<img src="http://200.200.72.250:1000/html/img/product_logo.png" />
+	</div>
+	<script>
+	</script>
+	</textarea>
+	<textarea id="output" style="width:100%;height:200px;"></textarea>
+	<button onClick="onGetInnerHTML()">Get InnerHTML</button>
+	<button onClick="onGetInnerHTML()">Get InnerText</button>
+	<button onClick="onGetInnerHTML()">Get InnerValue</button>
+	<button onClick="onGetBodyInnerHTML()">GetBodyInnerHTML</button>
+	<script>
+		function onGetInnerHTML()
+		{
+			document.getElementById("output").innerText = document.getElementById("testinput").value;
+		}
+		
+		function onGetBodyInnerHTML()
+		{
+			document.getElementById("output").value = window.document.body.innerHTML;
+		}
+	</script>
+</body>
+	
+</html>
+
+
+
+
+

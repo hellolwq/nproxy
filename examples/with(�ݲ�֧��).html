@@ -1,0 +1,55 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<p><button id="btn" onClick="WithGetProperty();">WithGetProperty</button></p>
+<p><button id="btn" onClick="WithSetProperty();">WithSetProperty</button></p>
+<p><button id="btn" onClick="WithCallFun();">WithCallFun</button></p>
+<p><button id="btn" onClick="WithCallIllegeFun();">WithCallIllegeFun</button></p>
+<script>
+function WithGetProperty()
+{
+	with(location)
+	{
+		alert("location.href:" + href);
+	}
+}
+
+function WithSetProperty()
+{
+	with(location)
+	{
+		href="http://g.cn";
+	}
+}
+
+function WithCallFun()
+{
+	var Obj = window;
+	with(Obj)
+	{
+		open("http://g.cn");
+	}
+}
+
+function WithCallIllegeFun()
+{
+	var Obj = location;
+	with(Obj)
+	{
+		var write = function(msg){window.alert("msg")};
+		write("url");//这个函数是全局域或是在JS代码块申明的，但是不属性Obj。
+	}
+}
+
+</script>
+
+
+</BODY>
+</html>
+
+
+
+
+

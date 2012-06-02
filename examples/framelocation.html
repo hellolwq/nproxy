@@ -1,0 +1,36 @@
+<HTML>
+<HEAD>
+<TITLE>First Document</TITLE>
+</HEAD>
+<BODY>
+<iframe  name="frame1" src="javascript:"></iframe>
+<p><button onClick="onSetFrameLocation()">Set Frame_win.Location</button></p>
+<p><button onClick="onTopDocumentLocation()">top.Location===document.location?</button></p>
+<p><button onClick="onDocumentTopLocation()">document.location===top.Location?</button></p>
+
+<script>
+	function onSetFrameLocation()
+	{
+		//frame1.location = window.location;
+		frame1.location = "http://200.200.72.50";
+	}
+	
+	function onTopDocumentLocation()
+	{
+		if(top.location !== document.location)
+			document.location = document.location;
+	}
+	
+	function onDocumentTopLocation()
+	{
+		if(document.location !== top.location)
+			document.location = top.location;
+	}
+</script>
+</BODY>
+</html>
+
+
+
+
+

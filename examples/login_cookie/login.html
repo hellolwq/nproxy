@@ -1,0 +1,27 @@
+<html>
+
+<head>
+</head>
+<body>
+<div id="output">
+<button onClick="onSetCookie()">Set Cookie</button>
+<button onClick="onReadCookie()">read Cookie</button>
+</div>
+
+<script>
+	function onSetCookie()
+	{
+		document.cookie="mainpage=set";
+	}
+	
+	function onReadCookie()
+	{	
+		alert(document.cookie);
+	}
+</script>
+<iframe src="login_frame.html" width="400" height="400">
+</iframe>
+</body>
+
+
+</html>                        
