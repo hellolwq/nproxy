@@ -2,6 +2,7 @@ var HTTP = require('http');
 var FS = require('fs');
 var URL = require('url');
 var HtmlParser = require('./lib/htmlparser.js');
+var CODE  = require('./lib/iconv-lite.js');
 
 var SVR_PORT = 8080;
 var LOG_DIR = "./logs/";
@@ -21,9 +22,9 @@ var g_portal_content = null;
 function main()
 {
 	init_nproxy();
-    var webSvr = HTTP.createServer(function (request, response){
-        if(!proxy_pre_handle(request, response))
-            proxy_handle(request, response);
+    var webSvr = HTTP.createServer(function (client_request, client_response){
+        if(!proxy_pre_handle(client_request, client_response))
+            proxy_handle(client_request, client_response);
         
     });
     webSvr.listen(SVR_PORT);
@@ -61,7 +62,9 @@ function proxy_handle(request, response)
     if(origUrl)
     {
         log(LOG_INFO,"origUrl:" + origUrl.protocol+"//" + origUrl.host+":" + origUrl.port+ origUrl.path);
-        htmlContent = proxy_request(origUrl,function(header,body){
+        origUrl.headers = proxy_copy_header(request);
+        htmlContent = proxy_request(origUrl,function(server_response,body){
+            var header = server_response.headers;
             if(header['content-type'] == 'image/jpeg'
                 || header['content-type'] == 'image/gif'
             )
@@ -72,14 +75,18 @@ function proxy_handle(request, response)
             {
                 if(body)
                 {
-                    if(response.proxy_buffer == null)
-                        response.proxy_buffer = body.toString();
-                    else
-                        response.proxy_buffer += body.toString();
+                    if(server_response.proxy_buffer == null)
+                    {
+                        server_response.proxy_buffer = [];
+                        server_response.proxy_buffer_size = 0;
+                    }
+                    
+                    server_response.proxy_buffer.push(body);
+                    server_response.proxy_buffer_size += body.length;
                 }
                 else
                 {
-                    var sendBuf = proxy_rewrite(response.proxy_buffer,request);
+                    var sendBuf = proxy_rewrite(request,server_response);
                     proxy_response_client(response, sendBuf , header);
                     proxy_response_client(response, null);
                 }
@@ -96,6 +103,54 @@ function proxy_handle(request, response)
     }
 }
 
+function proxy_get_response_encoding(http_obj)
+{
+    if(typeof(http_obj.proxy_encoding) == 'string')
+        return http_obj.proxy_encoding;
+    
+    var retEncoding = "utf8";
+    var encodeType = http_obj.headers["content-type"];
+    //log(LOG_DBG,"encodeType=" + encodeType);
+    if(/charset=/i.test(encodeType))
+    {
+        retEncoding = encodeType.replace(/^[^=]+charset=/,'');
+        if(retEncoding == 'gb2312')
+            retEncoding = 'gbk';
+    }
+    
+    return (http_obj.proxy_encoding = retEncoding);
+}
+
+
+function proxy_decode_stream(response)
+{
+    var buffer = new Buffer(response.proxy_buffer_size), pos = 0;
+    var buffers = response.proxy_buffer;
+    var encoding = proxy_get_response_encoding(response);
+    for(var i = 0, len = buffers.length; i < len; i++) {
+        buffers[i].copy(buffer, pos);
+        pos += buffers[i].length;
+    }
+    return CODE.decode(buffer,encoding);
+}
+                    
+function proxy_copy_header(request)
+{
+    var retHeader = {};
+    if(!request || !request.headers)
+        return retHeader;
+    
+    var ignoreItems = ['host','accept-encoding'].join(',')
+    for( var key in request.headers)
+    {
+        if(ignoreItems.indexOf(key.toLowerCase()) !=  -1)
+            continue;
+        
+        retHeader[key] = request.headers[key];
+    }
+    
+    return retHeader;
+}
 
 function init_nproxy()
 {
@@ -170,12 +225,12 @@ function proxy_request(urlObj,callback)
 	//log(LOG_DBG,"proxy_request " + urlObj);
     HTTP.get(urlObj, function(res) {
       res.on('data',function(body){
-			//log(LOG_DBG,"proxy_request:" + body);
-            callback(res.headers,body);
+			//log(LOG_DBG,"response length:" + body);
+            callback(res,body);
       });
 	  
 	   res.on('end',function(body){
-			callback(res.headers,null);
+			callback(res,null);
       });
     }).on('error', function(e) {
        //log(LOG_ERROR,e.getMessage());
@@ -183,21 +238,20 @@ function proxy_request(urlObj,callback)
     });
 }
 
-function proxy_rewrite(data,request)
+function proxy_rewrite(client_request,server_response)
 {
+    var encoding = proxy_get_response_encoding(server_response);
+    var data = proxy_decode_stream(server_response);
     //log(LOG_DBG,"typeof(data):",typeof(data));
-    log(LOG_DBG,"proxy_rewrite before:" + data);
+    //log(LOG_DBG,"proxy_rewrite before:" + data);
     var ret = data;
-   // try{
-        ret = HtmlParser.RewriteHtml(data,request,helper_trans_url);
-    //}catch(e){
-    //    ret = data;
-    //}
-    log(LOG_DBG,"proxy_rewrite after:" + ret);
-    return ret;
-    /*return data.replace(/(\s(src|href)=['"])([^'"]*)(['"])/g, function() { 
-        return (arguments[1]+helper_trans_url(arguments[3],request)+arguments[4]);
-    });*/
+    try{
+        ret = HtmlParser.RewriteHtml(data,client_request,helper_trans_url);
+    }catch(e){
+        ret = data;
+    }
+    //log(LOG_DBG,"proxy_rewrite after:" + ret);
+    return CODE.encode(ret,"GBK")
 }
 
 function helper_trans_url(url,request)
@@ -219,7 +273,7 @@ function proxy_response_client(response,data,header)
     //log(LOG_DBG,"proxy_response_client,contentType=" + contentType);
     if(!response.is_headset)
     {
-		response.writeHead(200, {'Content-Type':contentType });
+		response.writeHead(200, {'content-type':contentType });
 		response.is_headset = true;
 	}
 	
