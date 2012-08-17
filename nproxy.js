@@ -52,7 +52,7 @@ function proxy_pre_handle(request, response)
         return false;
         
     proxy_response_client(response,g_portal_content);
-    proxy_response_client(response,null);
+    proxy_response_flush(response);
     return true;
 }
 
@@ -88,7 +88,7 @@ function proxy_handle(request, response)
                 {
                     var sendBuf = proxy_rewrite(request,server_response);
                     proxy_response_client(response, sendBuf , header);
-                    proxy_response_client(response, null);
+                    proxy_response_flush(response);
                 }
                 
             }
@@ -99,7 +99,7 @@ function proxy_handle(request, response)
     else
     {   
        proxy_response_client(response,ERROR_RESPONSE);
-       proxy_response_client(response,null);
+       proxy_response_flush(response);
     }
 }
 
@@ -243,25 +243,30 @@ function proxy_rewrite(client_request,server_response)
     var encoding = proxy_get_response_encoding(server_response);
     var data = proxy_decode_stream(server_response);
     //log(LOG_DBG,"typeof(data):",typeof(data));
-    //log(LOG_DBG,"proxy_rewrite before:" + data);
+    log(LOG_DBG,"***************************proxy_rewrite before:" + data);
     var ret = data;
-    try{
+    //try{
         ret = HtmlParser.RewriteHtml(data,client_request,helper_trans_url);
-    }catch(e){
-        ret = data;
-    }
-    //log(LOG_DBG,"proxy_rewrite after:" + ret);
+    //}catch(e){
+        //ret = data;
+    //}
+    log(LOG_DBG,"***************************proxy_rewrite after:" + ret);
     return CODE.encode(ret,"GBK")
 }
 
 function helper_trans_url(url,request)
 {
-    //log(LOG_DBG,"helper_trans_url,url=" + url + ",refUrl:" + request.orig_url);
+    log(LOG_DBG,"helper_trans_url,url=" + url + ",refUrl:" + request.orig_url);
     //nproxy/http/200.200.72.50
 	var fullPath = URL.resolve(request.orig_url,url);
 	var ret = (request.proxy_host?request.proxy_host:'') + "/nproxy/" + fullPath.replace(/^(https?):\/\//i,"$1/");
-    //log(LOG_DBG,"helper_trans_url url:" + url + ",ret=" + ret);
+    log(LOG_DBG,"helper_trans_url url:" + url + ",ret=" + ret);
     return ret;
+}
+
+function proxy_response_flush(response)
+{
+	proxy_response_client(response,null);
 }
 
 function proxy_response_client(response,data,header)
@@ -290,6 +295,8 @@ function log(level,info)
     if(level < LOG_ACCESS)
     {
         console.log(info);
+		if(g_dbgFile)
+			FS.writeSync(g_dbgFile, info, null);
     }
     else if(g_dbgFile)
     {
